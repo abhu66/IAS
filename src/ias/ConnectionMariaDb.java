@@ -26,18 +26,6 @@ public class ConnectionMariaDb {
             String password = "";
             conn = DriverManager.getConnection(url, user, password);
             System.err.println("Connection Success");
-            try {
-                for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                    if ("Windows".equals(info.getName())) {
-                        javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                        break;
-                    }
-                }
-            } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
-                java.util.logging.Logger.getLogger(FormLogin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-            }
-            FormLogin fl = new FormLogin(null, true);
-            fl.setVisible(true);
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "Connection Failed ! " + e.getMessage());
         }

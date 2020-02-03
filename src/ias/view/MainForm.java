@@ -5,6 +5,7 @@
  */
 package ias.view;
 
+import ias.PreferenceUser;
 import java.awt.Dimension;
 
 /**
@@ -13,13 +14,14 @@ import java.awt.Dimension;
  */
 public class MainForm extends javax.swing.JFrame {
 
+    PreferenceUser prefs = new PreferenceUser();
     /**
      * Creates new form MainForm
      */
     public MainForm() {
         initComponents();
         setExtendedState(MAXIMIZED_BOTH);
-    
+        jLabel2.setText("Login as : "+prefs.getUsernamePrefs());
     }
 
     /**
@@ -151,9 +153,7 @@ public class MainForm extends javax.swing.JFrame {
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
 
-        jTextField1.setText("jTextField1");
-
-        jButton1.setText("jButton1");
+        jButton1.setText("Search");
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -173,6 +173,11 @@ public class MainForm extends javax.swing.JFrame {
         jButton3.setText("Edit");
 
         jButton4.setText("New");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
 
         jButton5.setText("View");
 
@@ -220,7 +225,7 @@ public class MainForm extends javax.swing.JFrame {
         jLabel1.setText("Welcome");
 
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel2.setText("Login As : Administrator");
+        jLabel2.setText("Login As : ");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -229,7 +234,7 @@ public class MainForm extends javax.swing.JFrame {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 426, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 490, Short.MAX_VALUE)
                 .addComponent(jLabel2)
                 .addGap(10, 10, 10))
         );
@@ -288,6 +293,11 @@ public class MainForm extends javax.swing.JFrame {
        
        
     }//GEN-LAST:event_jButton9ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+       FormNewAsset formNewAsset = new FormNewAsset(this, rootPaneCheckingEnabled);
+       formNewAsset.setVisible(rootPaneCheckingEnabled);
+    }//GEN-LAST:event_jButton4ActionPerformed
 
     /**
      * @param args the command line arguments

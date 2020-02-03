@@ -5,14 +5,24 @@
  */
 package ias.view;
 
+import ias.ConnectionMariaDb;
+import ias.PreferenceUser;
+import ias.models.User;
 import java.awt.Color;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.prefs.Preferences;
 import javafx.scene.layout.Border;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
@@ -141,7 +151,37 @@ public class FormLogin extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
+        try {
+            String username = jTextField1.getText();
+            String password = jPasswordField1.getText();
+            String queryLogin = "SELECT * FROM user where username = ? and password = md5(?)";
+            
+            PreparedStatement ps = ConnectionMariaDb.getConnection().prepareCall(queryLogin);
+            ps.setString(1, username);
+            ps.setString(2, password);
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()){
+                User user = new User(
+                        rs.getInt("id"),
+                        rs.getString("username"),
+                        rs.getString("role"),
+                        rs.getString("name"));
+                
+                //set preperences
+                PreferenceUser prefsUser = new PreferenceUser();
+                prefsUser.setPreference(user);
+                
+                MainForm mainForm = new MainForm();
+                mainForm.setVisible(rootPaneCheckingEnabled);
+                dispose();
+            }
+            else {
+                JOptionPane.showMessageDialog(null, "Username or Password is wrong !");
+                jTextField1.requestFocus();
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(FormLogin.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
