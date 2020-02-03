@@ -45,6 +45,7 @@ public class FormNewAsset extends javax.swing.JDialog {
         jButton2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Form Asset");
         setBackground(new java.awt.Color(255, 255, 255));
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
@@ -59,7 +60,7 @@ public class FormNewAsset extends javax.swing.JDialog {
 
         jLabel2.setText("Nama Asset");
 
-        jLabel3.setText("Description");
+        jLabel3.setText("Deskripsi");
 
         jLabel4.setText("Kondisi");
 
