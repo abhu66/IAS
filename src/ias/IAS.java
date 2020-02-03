@@ -18,8 +18,8 @@ public class IAS {
      */
     public static void main(String[] args) {
         // TODO code application logic here
-        FormLogin fl = new FormLogin(null, true);
-        fl.setVisible(true);
+        ConnectionMariaDb.getConnection();
+        
     }
     
 }
