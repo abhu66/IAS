@@ -21,7 +21,7 @@ public class MainForm extends javax.swing.JFrame {
     public MainForm() {
         initComponents();
         setExtendedState(MAXIMIZED_BOTH);
-        jLabel2.setText("Login as : "+prefs.getUsernamePrefs());
+        jLabel2.setText("Login sebagai : "+prefs.getUsernamePrefs());
     }
 
     /**
@@ -168,18 +168,18 @@ public class MainForm extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(jTable1);
 
-        jButton2.setText("Delete");
+        jButton2.setText("Hapus");
 
-        jButton3.setText("Edit");
+        jButton3.setText("Ubah");
 
-        jButton4.setText("New");
+        jButton4.setText("Baru");
         jButton4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton4ActionPerformed(evt);
             }
         });
 
-        jButton5.setText("View");
+        jButton5.setText("Lihat");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -222,7 +222,7 @@ public class MainForm extends javax.swing.JFrame {
         jPanel3.setBackground(new java.awt.Color(51, 51, 255));
 
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel1.setText("Welcome");
+        jLabel1.setText("Selamat Datang");
 
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("Login As : ");
@@ -234,7 +234,7 @@ public class MainForm extends javax.swing.JFrame {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 490, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 457, Short.MAX_VALUE)
                 .addComponent(jLabel2)
                 .addGap(10, 10, 10))
         );
