@@ -18,6 +18,7 @@ public class FormNewAsset extends javax.swing.JDialog {
     
     public AssetDaoImpl assetDaoImpl = new AssetDaoImpl();
     private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+    public MainForm mainForm;
 
     /**
      * Creates new form FormNewAsset
@@ -168,6 +169,7 @@ public class FormNewAsset extends javax.swing.JDialog {
         
         Asset asset = new Asset(code, name, deskripsi, condition, createdDate,"AVAILABLE");
         assetDaoImpl.addNewAsset(asset,this);
+        mainForm.tableAssetMaster();
     }//GEN-LAST:event_jButton2ActionPerformed
 
     /**

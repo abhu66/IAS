@@ -21,6 +21,7 @@ import java.util.logging.Logger;
 import java.util.prefs.Preferences;
 import javafx.scene.layout.Border;
 import javax.imageio.ImageIO;
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.border.CompoundBorder;
@@ -40,6 +41,7 @@ public class FormLogin extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         setLocationRelativeTo(null);
+       // jButton2.setBorder(BorderFactory.createEmptyBorder(0,0,0,0));
    
     }
     

@@ -342,6 +342,7 @@ public class MainForm extends javax.swing.JFrame {
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
        FormNewAsset formNewAsset = new FormNewAsset(this, rootPaneCheckingEnabled);
+       formNewAsset.mainForm = this;
        formNewAsset.setVisible(rootPaneCheckingEnabled);
     }//GEN-LAST:event_jButton4ActionPerformed
 
