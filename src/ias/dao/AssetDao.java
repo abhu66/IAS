@@ -16,4 +16,5 @@ import java.util.List;
 public interface AssetDao {
     public void addNewAsset(Asset asset,FormNewAsset formNewAsset);
     public List<Asset> getAllAsset(String param);
+    public Asset finByCode(String code);
 }

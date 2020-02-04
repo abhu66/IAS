@@ -11,6 +11,7 @@ import ias.models.Asset;
 import java.awt.Dimension;
 import java.text.SimpleDateFormat;
 import java.util.List;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -22,6 +23,7 @@ public class MainForm extends javax.swing.JFrame {
     PreferenceUser prefs                = new PreferenceUser();
     AssetDaoImpl assetDaoImpl           = new AssetDaoImpl();
     public DefaultTableModel tableModel;
+    public String code;
     /**
      * Creates new form MainForm
      */
@@ -214,6 +216,11 @@ public class MainForm extends javax.swing.JFrame {
         });
 
         jButton5.setText("Lihat");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -342,6 +349,22 @@ public class MainForm extends javax.swing.JFrame {
         // TODO add your handling code here:
         tableAssetMaster();
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        int row = jTable1.getSelectedRow();
+        if(row < 0){
+            JOptionPane.showMessageDialog(rootPane, "Harap pilih data !");
+        }
+        else {
+            code = jTable1.getValueAt(row, 1).toString();
+            System.err.println("Codesss : "+code);
+            FormViewAsset formViewAsset = new FormViewAsset(this, rootPaneCheckingEnabled);
+            formViewAsset.mainForm = this;
+            formViewAsset.code = code;
+            formViewAsset.initView(code);
+            formViewAsset.setVisible(rootPaneCheckingEnabled);
+        }
+    }//GEN-LAST:event_jButton5ActionPerformed
 
     /**
      * @param args the command line arguments

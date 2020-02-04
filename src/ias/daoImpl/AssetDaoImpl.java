@@ -30,6 +30,7 @@ public class AssetDaoImpl implements AssetDao{
     String query_insert_new         = "INSERT INTO Asset values(null,?,?,?,?,?,?)";
     String query_list_asset         = "SELECT * FROM Asset WHERE code = ? or name = ?";
     String query_list_asset_all     = "SELECT * FROM Asset ORDER BY code DESC";
+    String query_find_by_code       = "SELECT * FROM Asset where code = ?";
   
     PreparedStatement ps;
     ResultSet rs;
@@ -88,5 +89,28 @@ public class AssetDaoImpl implements AssetDao{
             Logger.getLogger(AssetDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
         }   
         return listAsset;
+    }
+
+    @Override
+    public Asset finByCode(String code) {
+         Asset asset = null;
+        try {
+            ps = conn.prepareStatement(query_find_by_code);
+            ps.setString(1, code);
+            rs = ps.executeQuery();
+            while(rs.next()){
+               asset =  new Asset(
+                         rs.getString("code"),
+                         rs.getString("name"),
+                         rs.getString("description"),  
+                         rs.getString("conditions"),
+                         rs.getDate("created_date"),
+                         rs.getString("status"));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(AssetDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return asset;
     }
 }
