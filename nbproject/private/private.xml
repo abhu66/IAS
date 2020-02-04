@@ -3,12 +3,9 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/asyst/Documents/NetBeansProjects/IAS/src/ias/PreferenceUser.java</file>
-            <file>file:/C:/Users/asyst/Documents/NetBeansProjects/IAS/src/ias/models/User.java</file>
+            <file>file:/C:/Users/asyst/Documents/NetBeansProjects/IAS/src/ias/view/FormNewAsset.java</file>
             <file>file:/C:/Users/asyst/Documents/NetBeansProjects/IAS/src/ias/view/FormLogin.java</file>
             <file>file:/C:/Users/asyst/Documents/NetBeansProjects/IAS/src/ias/view/MainForm.java</file>
-            <file>file:/C:/Users/asyst/Documents/NetBeansProjects/IAS/src/ias/ConnectionMariaDb.java</file>
-            <file>file:/C:/Users/asyst/Documents/NetBeansProjects/IAS/src/ias/IAS.java</file>
         </group>
     </open-files>
 </project-private>

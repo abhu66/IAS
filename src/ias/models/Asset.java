@@ -5,25 +5,31 @@
  */
 package ias.models;
 
+import java.util.Date;
+
 /**
  *
  * @author asyst
  */
 public class Asset {
-   public int id;
-   public String code;
-   public String name;
-   public String description;
-   public String condition;
-   public String createdDate;
 
-    public Asset(String code, String name, String description, String condition, String createdDate) {
+    public int id;
+    public String code;
+    public String name;
+    public String description;
+    public String condition;
+    public Date createdDate;
+    public String status;
+
+    public Asset(String code, String name, String description, String condition, Date createdDate, String status) {
         this.code = code;
         this.name = name;
         this.description = description;
         this.condition = condition;
         this.createdDate = createdDate;
+        this.status = status;
     }
+
     public int getId() {
         return id;
     }
@@ -64,13 +70,19 @@ public class Asset {
         this.condition = condition;
     }
 
-    public String getCreatedDate() {
+    public Date getCreatedDate() {
         return createdDate;
     }
 
-    public void setCreatedDate(String createdDate) {
+    public void setCreatedDate(Date createdDate) {
         this.createdDate = createdDate;
     }
 
-   
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
 }

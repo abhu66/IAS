@@ -5,11 +5,19 @@
  */
 package ias.view;
 
+import ias.daoImpl.AssetDaoImpl;
+import ias.models.Asset;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  *
  * @author asyst
  */
 public class FormNewAsset extends javax.swing.JDialog {
+    
+    public AssetDaoImpl assetDaoImpl = new AssetDaoImpl();
+    private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
     /**
      * Creates new form FormNewAsset
@@ -69,6 +77,11 @@ public class FormNewAsset extends javax.swing.JDialog {
         jButton1.setText("Batal");
 
         jButton2.setText("Simpan");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -145,6 +158,17 @@ public class FormNewAsset extends javax.swing.JDialog {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        String code = jTextField1.getText();
+        String name = jTextField2.getText();
+        String deskripsi = jTextArea1.getText();
+        String condition = jComboBox1.getSelectedItem().toString();
+        Date createdDate = jDateChooser1.getDate();
+        
+        Asset asset = new Asset(code, name, deskripsi, condition, createdDate,"AVAILABLE");
+        assetDaoImpl.addNewAsset(asset,this);
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * @param args the command line arguments

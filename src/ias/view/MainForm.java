@@ -6,7 +6,12 @@
 package ias.view;
 
 import ias.PreferenceUser;
+import ias.daoImpl.AssetDaoImpl;
+import ias.models.Asset;
 import java.awt.Dimension;
+import java.text.SimpleDateFormat;
+import java.util.List;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -14,7 +19,9 @@ import java.awt.Dimension;
  */
 public class MainForm extends javax.swing.JFrame {
 
-    PreferenceUser prefs = new PreferenceUser();
+    PreferenceUser prefs                = new PreferenceUser();
+    AssetDaoImpl assetDaoImpl           = new AssetDaoImpl();
+    public DefaultTableModel tableModel;
     /**
      * Creates new form MainForm
      */
@@ -22,6 +29,28 @@ public class MainForm extends javax.swing.JFrame {
         initComponents();
         setExtendedState(MAXIMIZED_BOTH);
         jLabel2.setText("Login sebagai : "+prefs.getUsernamePrefs());
+        tableAssetMaster();
+    }
+    
+    public void tableAssetMaster(){
+        String [] header = {"NO","KODE","NAMA","TANGGAL PENGADAAN","KONDISI","STATUS"};
+        tableModel = new DefaultTableModel(null, header);
+        jTable1.setModel(tableModel);
+        List<Asset> listAllAsset = assetDaoImpl.getAllAsset(jTextField1.getText());
+        
+        if(listAllAsset != null || !listAllAsset.isEmpty()){
+            int number = 1;
+            for(Asset asset : listAllAsset){
+                tableModel.addRow(new Object[]{
+                    number++,
+                    asset.code,
+                    asset.name,
+                    new SimpleDateFormat("dd-MMMM-yyyy").format(asset.createdDate),
+                    asset.condition,
+                    asset.status,
+                 });
+            }
+        }
     }
 
     /**
@@ -154,6 +183,11 @@ public class MainForm extends javax.swing.JFrame {
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
 
         jButton1.setText("Search");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -215,7 +249,7 @@ public class MainForm extends javax.swing.JFrame {
                     .addComponent(jButton4)
                     .addComponent(jButton5))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 344, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -234,7 +268,7 @@ public class MainForm extends javax.swing.JFrame {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 457, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 533, Short.MAX_VALUE)
                 .addComponent(jLabel2)
                 .addGap(10, 10, 10))
         );
@@ -279,6 +313,10 @@ public class MainForm extends javax.swing.JFrame {
 //        incomingForm.setLocation((desktopSize.width - jInternalFrameSize.width)/2,
 //            (desktopSize.height- jInternalFrameSize.height)/2);
 //        incomingForm.setVisible(rootPaneCheckingEnabled);
+        FormIncoming formIncoming = new FormIncoming(this, rootPaneCheckingEnabled);
+        formIncoming.setVisible(rootPaneCheckingEnabled);
+
+
     }//GEN-LAST:event_jButton8ActionPerformed
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
@@ -290,7 +328,8 @@ public class MainForm extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton10ActionPerformed
 
     private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
-       
+       FormOutgoing formOutgoing = new FormOutgoing(this, rootPaneCheckingEnabled);
+       formOutgoing.setVisible(rootPaneCheckingEnabled);
        
     }//GEN-LAST:event_jButton9ActionPerformed
 
@@ -298,6 +337,11 @@ public class MainForm extends javax.swing.JFrame {
        FormNewAsset formNewAsset = new FormNewAsset(this, rootPaneCheckingEnabled);
        formNewAsset.setVisible(rootPaneCheckingEnabled);
     }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        tableAssetMaster();
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
