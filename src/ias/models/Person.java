@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ias.view;
+package ias.models;
 
 /**
  *
@@ -15,13 +15,15 @@ public class Person {
     private String name;
     private String rank;
     private String position;
-    private String phoneNumber;
+    private String phone_number;
 
-    public Person(String nip, String name, String rank, String phoneNumber) {
+    public Person(int id, String nip, String name, String rank, String position, String phone_number) {
+        this.id = id;
         this.nip = nip;
         this.name = name;
         this.rank = rank;
-        this.phoneNumber = phoneNumber;
+        this.position = position;
+        this.phone_number = phone_number;
     }
 
     public int getId() {
@@ -64,11 +66,11 @@ public class Person {
         this.position = position;
     }
 
-    public String getPhoneNumber() {
-        return phoneNumber;
+    public String getPhone_number() {
+        return phone_number;
     }
 
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
+    public void setPhone_number(String phone_number) {
+        this.phone_number = phone_number;
     }
 }

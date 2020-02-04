@@ -167,7 +167,7 @@ public class FormNewAsset extends javax.swing.JDialog {
         String condition = jComboBox1.getSelectedItem().toString();
         Date createdDate = jDateChooser1.getDate();
         
-        Asset asset = new Asset(code, name, deskripsi, condition, createdDate,"AVAILABLE");
+        Asset asset = new Asset(0,code, name, deskripsi, condition, createdDate,"AVAILABLE");
         assetDaoImpl.addNewAsset(asset,this);
         mainForm.tableAssetMaster();
     }//GEN-LAST:event_jButton2ActionPerformed

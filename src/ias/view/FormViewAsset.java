@@ -30,7 +30,6 @@ public class FormViewAsset extends javax.swing.JDialog {
     }
     
     public void initView(String code){
-        System.out.print("Code : "+code);
         Asset asset = assetDaoImpl.finByCode(code);
         jTextField1.setText(asset.code);
         jTextField2.setText(asset.name);

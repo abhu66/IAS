@@ -33,5 +33,9 @@ public class PreferenceUser {
     public String getUsernamePrefs(){
         return prefs.get(username, "username");
     }
+    public String getUserRolePrefs(){
+        return prefs.get(role, "role");
+    }
+    
     
 }

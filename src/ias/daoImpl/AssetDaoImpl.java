@@ -8,6 +8,7 @@ package ias.daoImpl;
 import ias.ConnectionMariaDb;
 import ias.dao.AssetDao;
 import ias.models.Asset;
+import ias.view.FormEditAsset;
 import ias.view.FormNewAsset;
 import java.sql.Connection;
 import java.sql.Date;
@@ -31,6 +32,7 @@ public class AssetDaoImpl implements AssetDao{
     String query_list_asset         = "SELECT * FROM Asset WHERE code = ? or name = ?";
     String query_list_asset_all     = "SELECT * FROM Asset ORDER BY code DESC";
     String query_find_by_code       = "SELECT * FROM Asset where code = ?";
+    String query_update_asset       = "UPDATE Asset set code = ?, name = ? ,description = ?, conditions = ? where id = ? ";
   
     PreparedStatement ps;
     ResultSet rs;
@@ -76,6 +78,7 @@ public class AssetDaoImpl implements AssetDao{
             rs = ps.executeQuery();
             while(rs.next()){
                 Asset asset =  new Asset(
+                         rs.getInt("id"),
                          rs.getString("code"),
                          rs.getString("name"),
                          rs.getString("description"),  
@@ -100,17 +103,38 @@ public class AssetDaoImpl implements AssetDao{
             rs = ps.executeQuery();
             while(rs.next()){
                asset =  new Asset(
+                         rs.getInt("id"),
                          rs.getString("code"),
                          rs.getString("name"),
                          rs.getString("description"),  
                          rs.getString("conditions"),
                          rs.getDate("created_date"),
                          rs.getString("status"));
+
             }
         } catch (SQLException ex) {
             Logger.getLogger(AssetDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
         
         return asset;
+    }
+
+    @Override
+    public void saveOnEdit(Asset asset, FormEditAsset formEditAsset) {
+        try {
+            ps = conn.prepareStatement(query_update_asset);
+            ps.setString(1, asset.code);
+            ps.setString(2, asset.name);
+            ps.setString(3, asset.description);
+            ps.setString(4, asset.condition);
+            ps.setInt(5,asset.id);
+            System.out.println("ID: "+asset.id);
+            ps.executeUpdate();
+            JOptionPane.showMessageDialog(null, "Berhasil diubah !");
+            formEditAsset.dispose();
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Gagal diubah ! "+ex.getMessage());
+            Logger.getLogger(AssetDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }//To change body of generated methods, choose Tools | Templates.
     }
 }

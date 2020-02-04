@@ -32,6 +32,13 @@ public class MainForm extends javax.swing.JFrame {
         setExtendedState(MAXIMIZED_BOTH);
         jLabel2.setText("Login sebagai : "+prefs.getUsernamePrefs());
         tableAssetMaster();
+        jButton12.setVisible(false);
+        if(prefs.getUserRolePrefs().equalsIgnoreCase("administrator")){
+            jButton10.setVisible(rootPaneCheckingEnabled);
+        }
+        else {
+            jButton10.setVisible(false);
+        }
     }
     
     public void tableAssetMaster(){
@@ -71,6 +78,7 @@ public class MainForm extends javax.swing.JFrame {
         jButton9 = new javax.swing.JButton();
         jButton10 = new javax.swing.JButton();
         jButton11 = new javax.swing.JButton();
+        jButton12 = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jTextField1 = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
@@ -135,8 +143,8 @@ public class MainForm extends javax.swing.JFrame {
 
         jButton10.setBackground(new java.awt.Color(102, 102, 255));
         jButton10.setForeground(new java.awt.Color(255, 255, 255));
-        jButton10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ias/images/report.png"))); // NOI18N
-        jButton10.setText("Report                           ");
+        jButton10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ias/images/admin.png"))); // NOI18N
+        jButton10.setText("Administrator               ");
         jButton10.setBorderPainted(false);
         jButton10.setContentAreaFilled(false);
         jButton10.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -154,6 +162,21 @@ public class MainForm extends javax.swing.JFrame {
         jButton11.setText("Log Out");
         jButton11.setContentAreaFilled(false);
 
+        jButton12.setBackground(new java.awt.Color(102, 102, 255));
+        jButton12.setForeground(new java.awt.Color(255, 255, 255));
+        jButton12.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ias/images/pic.png"))); // NOI18N
+        jButton12.setText("Add PIC");
+        jButton12.setBorderPainted(false);
+        jButton12.setContentAreaFilled(false);
+        jButton12.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jButton12.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        jButton12.setMargin(new java.awt.Insets(2, 2, 2, 0));
+        jButton12.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton12ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -162,8 +185,11 @@ public class MainForm extends javax.swing.JFrame {
             .addComponent(jButton7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jButton8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jButton9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jButton10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jButton11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jButton10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jButton12, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -178,7 +204,9 @@ public class MainForm extends javax.swing.JFrame {
                 .addComponent(jButton9)
                 .addGap(0, 0, 0)
                 .addComponent(jButton10)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 191, Short.MAX_VALUE)
+                .addGap(0, 0, 0)
+                .addComponent(jButton12)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 158, Short.MAX_VALUE)
                 .addComponent(jButton11))
         );
 
@@ -207,6 +235,11 @@ public class MainForm extends javax.swing.JFrame {
         jButton2.setText("Hapus");
 
         jButton3.setText("Ubah");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         jButton4.setText("Baru");
         jButton4.addActionListener(new java.awt.event.ActionListener() {
@@ -331,7 +364,13 @@ public class MainForm extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton7ActionPerformed
 
     private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
-        // TODO add your handling code here:
+        if(jButton12.isVisible()){
+             jButton12.setVisible(false);
+        }
+        else {
+             jButton12.setVisible(rootPaneCheckingEnabled);
+        }
+       
     }//GEN-LAST:event_jButton10ActionPerformed
 
     private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
@@ -366,6 +405,25 @@ public class MainForm extends javax.swing.JFrame {
             formViewAsset.setVisible(rootPaneCheckingEnabled);
         }
     }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+         int row = jTable1.getSelectedRow();
+        if(row < 0){
+            JOptionPane.showMessageDialog(rootPane, "Harap pilih data !");
+        }
+        else {
+            code = jTable1.getValueAt(row, 1).toString();
+            FormEditAsset formEditAsset = new FormEditAsset(this, rootPaneCheckingEnabled);
+            formEditAsset.mainForm = this;
+            formEditAsset.initView(code);
+            formEditAsset.setVisible(rootPaneCheckingEnabled);
+        }
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton12ActionPerformed
+       FormNewPic formNewPic = new FormNewPic(this, rootPaneCheckingEnabled);
+       formNewPic.setVisible(rootPaneCheckingEnabled);
+    }//GEN-LAST:event_jButton12ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -406,6 +464,7 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton10;
     private javax.swing.JButton jButton11;
+    private javax.swing.JButton jButton12;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;

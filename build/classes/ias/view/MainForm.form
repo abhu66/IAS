@@ -59,8 +59,12 @@
               <Component id="jButton7" alignment="0" max="32767" attributes="0"/>
               <Component id="jButton8" alignment="0" max="32767" attributes="0"/>
               <Component id="jButton9" alignment="0" max="32767" attributes="0"/>
-              <Component id="jButton10" alignment="0" max="32767" attributes="0"/>
               <Component id="jButton11" alignment="0" max="32767" attributes="0"/>
+              <Component id="jButton10" alignment="0" max="32767" attributes="0"/>
+              <Group type="102" alignment="1" attributes="0">
+                  <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                  <Component id="jButton12" min="-2" pref="130" max="-2" attributes="0"/>
+              </Group>
           </Group>
         </DimensionLayout>
         <DimensionLayout dim="1">
@@ -76,7 +80,9 @@
                   <Component id="jButton9" min="-2" max="-2" attributes="0"/>
                   <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                   <Component id="jButton10" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace pref="191" max="32767" attributes="0"/>
+                  <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
+                  <Component id="jButton12" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace pref="158" max="32767" attributes="0"/>
                   <Component id="jButton11" min="-2" max="-2" attributes="0"/>
               </Group>
           </Group>
@@ -166,9 +172,9 @@
               <Color blue="ff" green="ff" red="ff" type="rgb"/>
             </Property>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/ias/images/report.png"/>
+              <Image iconType="3" name="/ias/images/admin.png"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="Report                           "/>
+            <Property name="text" type="java.lang.String" value="Administrator               "/>
             <Property name="borderPainted" type="boolean" value="false"/>
             <Property name="contentAreaFilled" type="boolean" value="false"/>
             <Property name="horizontalAlignment" type="int" value="2"/>
@@ -195,6 +201,30 @@
             <Property name="text" type="java.lang.String" value="Log Out"/>
             <Property name="contentAreaFilled" type="boolean" value="false"/>
           </Properties>
+        </Component>
+        <Component class="javax.swing.JButton" name="jButton12">
+          <Properties>
+            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="ff" green="66" red="66" type="rgb"/>
+            </Property>
+            <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="ff" green="ff" red="ff" type="rgb"/>
+            </Property>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="3" name="/ias/images/pic.png"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="Add PIC"/>
+            <Property name="borderPainted" type="boolean" value="false"/>
+            <Property name="contentAreaFilled" type="boolean" value="false"/>
+            <Property name="horizontalAlignment" type="int" value="2"/>
+            <Property name="horizontalTextPosition" type="int" value="4"/>
+            <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
+              <Insets value="[2, 2, 2, 0]"/>
+            </Property>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton12ActionPerformed"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>
@@ -290,6 +320,9 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="Ubah"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton3ActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="jButton4">
           <Properties>

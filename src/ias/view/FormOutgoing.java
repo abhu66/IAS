@@ -5,6 +5,21 @@
  */
 package ias.view;
 
+import ias.daoImpl.AssetDaoImpl;
+import ias.daoImpl.OutgoingDaoImpl;
+import ias.daoImpl.PersonDaoImpl;
+import ias.daoImpl.TransactionDaoImpl;
+import ias.models.Asset;
+import ias.models.Outgoing;
+import ias.models.Person;
+import ias.models.Transaction;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author asyst
@@ -14,10 +29,94 @@ public class FormOutgoing extends javax.swing.JDialog {
     /**
      * Creates new form FormOutgoing
      */
+    
+    
+    DefaultTableModel tableModel;
+    AssetDaoImpl assetDaoImpl               = new AssetDaoImpl();
+    PersonDaoImpl personDaoImpl             = new PersonDaoImpl();
+    OutgoingDaoImpl outgoingDaoImpl         = new OutgoingDaoImpl();
+    TransactionDaoImpl transactionDaoImpl   = new TransactionDaoImpl();
+    
+    HashMap<String, Asset> mapAsset         = new HashMap<>();
+    
+    public Person person;
+    public Asset asset;
+    
     public FormOutgoing(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
         setLocationRelativeTo(null);
+        initMapAsset();
+        initData();
+    }
+    
+    private void initData(){
+        jDateChooser1.setDate(new Date());
+    }
+    
+    public void generateTrNumber(){
+        String tr_number = outgoingDaoImpl.generateNumberTr();
+        Outgoing outgoing = new Outgoing();
+        outgoing.setTr_number(tr_number);
+        outgoing.setId_pic(person.getNip());
+        outgoing.setType(jComboBox1.getSelectedItem().toString());
+        outgoing.setStartDate(jDateChooser1.getDate());
+        outgoingDaoImpl.addNewOutgoing(outgoing);
+        jTextField6.setText(tr_number);
+    }
+    
+    public void tableTransactionOutgoing(){
+        String [] header = {"NO","NO. TRANSAKSI","NAMA BARANG","TANGGAL PINJAM","TANGGAL KEMBALI","STATUS"};
+        tableModel = new DefaultTableModel(null, header);
+        jTable1.setModel(tableModel);
+        List<Transaction> listTransaction = transactionDaoImpl.listTransaction(jTextField6.getText());
+        System.out.println("Size : "+listTransaction.size());
+        if(listTransaction != null || !listTransaction.isEmpty()){
+            int number = 1;
+            for(Transaction transaction : listTransaction){
+                tableModel.addRow(new Object[]{
+                    number++,
+                    transaction.getTr_number(),
+                    mapAsset.get(transaction.getAsset_id()).name,
+                    new SimpleDateFormat("dd-MMMM-yyyy").format(transaction.getStarDate()),
+                    new SimpleDateFormat("dd-MMMM-yyyy").format(transaction.getEndDate()),
+                    transaction.getStatus()
+                 });
+            }
+        }
+    }
+    
+    private void initMapAsset(){
+        List<Asset> listAsset = assetDaoImpl.getAllAsset("");
+        if(listAsset != null || !listAsset.isEmpty()){
+            listAsset.forEach((asset) -> {
+                String code = asset.code;
+                if(!mapAsset.containsKey(code)){
+                    mapAsset.put(code, asset);
+                }
+                else {
+                    mapAsset.get(code);
+                }
+            });
+        }
+    }
+    
+    private void addNew(){
+        Transaction transaction = 
+                new Transaction(
+                        0, 
+                        jTextField6.getText(),
+                        person.getNip(),
+                        asset.getCode(),
+                        jDateChooser1.getDate(),
+                        jDateChooser2.getDate(), 
+                        "NOT AVAILABLE", 
+                        jComboBox1.getSelectedItem().toString());
+        
+        transactionDaoImpl.addNew(transaction, this);
+        tableTransactionOutgoing();
+        int countRow = jTable1.getRowCount();
+        jTextField8.setText(String.valueOf(countRow));
     }
 
     /**
@@ -39,6 +138,8 @@ public class FormOutgoing extends javax.swing.JDialog {
         jTextField3 = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         jTextField4 = new javax.swing.JTextField();
+        jLabel8 = new javax.swing.JLabel();
+        jTextField7 = new javax.swing.JTextField();
         jTextField5 = new javax.swing.JTextField();
         jButton2 = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -53,8 +154,11 @@ public class FormOutgoing extends javax.swing.JDialog {
         jDateChooser2 = new com.toedter.calendar.JDateChooser();
         jLabel7 = new javax.swing.JLabel();
         jComboBox1 = new javax.swing.JComboBox<>();
+        jLabel9 = new javax.swing.JLabel();
+        jTextField8 = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Form Peminjaman");
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -64,6 +168,11 @@ public class FormOutgoing extends javax.swing.JDialog {
         jTextField1.setEditable(false);
 
         jButton1.setText("Cari");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jLabel1.setText("NIP");
 
@@ -77,6 +186,10 @@ public class FormOutgoing extends javax.swing.JDialog {
 
         jTextField4.setEditable(false);
 
+        jLabel8.setText("No. Telp");
+
+        jTextField7.setEditable(false);
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -85,20 +198,22 @@ public class FormOutgoing extends javax.swing.JDialog {
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jTextField1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton1))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1)
                             .addComponent(jLabel2)
-                            .addComponent(jLabel3))
-                        .addGap(56, 56, 56)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(20, Short.MAX_VALUE))
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel8))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 53, Short.MAX_VALUE)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(jTextField2, javax.swing.GroupLayout.DEFAULT_SIZE, 245, Short.MAX_VALUE)
+                            .addComponent(jTextField3)
+                            .addComponent(jTextField4)
+                            .addComponent(jTextField7, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -119,10 +234,19 @@ public class FormOutgoing extends javax.swing.JDialog {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
                     .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel8)
+                    .addComponent(jTextField7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jButton2.setText("Cari");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -138,6 +262,11 @@ public class FormOutgoing extends javax.swing.JDialog {
         jScrollPane1.setViewportView(jTable1);
 
         jButton3.setText("Tambahkan");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("Detail"));
@@ -175,7 +304,7 @@ public class FormOutgoing extends javax.swing.JDialog {
                             .addComponent(jDateChooser1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jDateChooser2, javax.swing.GroupLayout.DEFAULT_SIZE, 139, Short.MAX_VALUE)
                             .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(0, 27, Short.MAX_VALUE)))
+                        .addGap(0, 63, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
@@ -200,6 +329,8 @@ public class FormOutgoing extends javax.swing.JDialog {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        jLabel9.setText("Total :");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -209,15 +340,20 @@ public class FormOutgoing extends javax.swing.JDialog {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jTextField5)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton3)))
+                        .addComponent(jButton3))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jLabel9)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jTextField8, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
 
@@ -230,14 +366,18 @@ public class FormOutgoing extends javax.swing.JDialog {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton2)
                     .addComponent(jButton3))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(22, 22, 22))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel9)
+                    .addComponent(jTextField8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(41, Short.MAX_VALUE))
         );
 
         jPanel1Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jButton2, jButton3});
@@ -250,11 +390,42 @@ public class FormOutgoing extends javax.swing.JDialog {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        PopUpPic popUpPic = new PopUpPic(null, rootPaneCheckingEnabled);
+        popUpPic.formOutgoing = this;
+        popUpPic.setVisible(rootPaneCheckingEnabled);
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        PopUpAsset popUpAsset = new PopUpAsset(null, rootPaneCheckingEnabled);
+        popUpAsset.formOutgoing = this;
+        popUpAsset.setVisible(rootPaneCheckingEnabled);
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+       if(person == null){
+           JOptionPane.showMessageDialog(rootPane, "Harap pilih PIC !");
+       }
+       else if(asset == null){
+           JOptionPane.showMessageDialog(rootPane, "Harap pilih Asset !");
+       }
+       else if(jDateChooser2.getDate() == null){
+            JOptionPane.showMessageDialog(rootPane, "Harap isi tanggal pengembalian !");
+       }
+       else {
+           addNew();
+       }
+      
+    }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -312,16 +483,20 @@ public class FormOutgoing extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField5;
+    public javax.swing.JTextField jTextField1;
+    public javax.swing.JTextField jTextField2;
+    public javax.swing.JTextField jTextField3;
+    public javax.swing.JTextField jTextField4;
+    public javax.swing.JTextField jTextField5;
     private javax.swing.JTextField jTextField6;
+    public javax.swing.JTextField jTextField7;
+    private javax.swing.JTextField jTextField8;
     // End of variables declaration//GEN-END:variables
 }

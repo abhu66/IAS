@@ -21,7 +21,8 @@ public class Asset {
     public Date createdDate;
     public String status;
 
-    public Asset(String code, String name, String description, String condition, Date createdDate, String status) {
+    public Asset(int id,String code, String name, String description, String condition, Date createdDate, String status) {
+        this.id = id;
         this.code = code;
         this.name = name;
         this.description = description;
