@@ -35,7 +35,7 @@ public class FormNewPic extends javax.swing.JDialog {
         String [] header = {"NO","NIP","NAMA","PANGKAT","JABATAN","NO.HP"};
         tableModel = new DefaultTableModel(null, header);
         jTable1.setModel(tableModel);
-        List<Person> listAllPerson = personDaoImpl.getAllPerson(jTextField1.getText());
+        List<Person> listAllPerson = personDaoImpl.getAllPerson(jTextField6.getText());
         
         if(listAllPerson != null || !listAllPerson.isEmpty()){
             int number = 1;
@@ -234,8 +234,8 @@ public class FormNewPic extends javax.swing.JDialog {
        String nip = jTextField1.getText();
        String name = jTextField2.getText();
        String rank = jTextField3.getText();
-       String position = jTextField4.getText();
-       String phoneNumber = jTextField5.getText();
+       String position      = jTextField4.getText();
+       String phoneNumber   = jTextField5.getText();
        
        
        Person person = new Person(0, nip, name, rank, position, phoneNumber);

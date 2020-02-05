@@ -6,6 +6,7 @@
 package ias.dao;
 
 import ias.models.Outgoing;
+import java.util.List;
 
 /**
  *
@@ -13,5 +14,9 @@ import ias.models.Outgoing;
  */
 public interface OutgoingDao {
     public void addNewOutgoing(Outgoing outgoing);
+    public void updateOutgoing(Outgoing outgoing);
+    public Outgoing findByTrNUmber(String tr_number);
+    public List<Outgoing> listAllOutgoing(String param);
+    public void deleteOutgoing(String tr_number);
     
 }

@@ -21,7 +21,11 @@ public class Transaction {
     private Date endDate;
     private String status;
     private String type;
+    private int total;
 
+    public Transaction(){
+        
+    }
     public Transaction(int id, String tr_number, String person_id, String asset_id, Date starDate, Date endDate, String status, String type) {
         this.id = id;
         this.tr_number = tr_number;
@@ -95,4 +99,13 @@ public class Transaction {
     public void setType(String type) {
         this.type = type;
     }
+
+    public int getTotal() {
+        return total;
+    }
+
+    public void setTotal(int total) {
+        this.total = total;
+    }
+    
 }

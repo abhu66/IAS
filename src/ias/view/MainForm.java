@@ -39,6 +39,9 @@ public class MainForm extends javax.swing.JFrame {
         else {
             jButton10.setVisible(false);
         }
+        
+        jButton13.setVisible(false);
+        jButton14.setVisible(false);
     }
     
     public void tableAssetMaster(){
@@ -79,6 +82,8 @@ public class MainForm extends javax.swing.JFrame {
         jButton10 = new javax.swing.JButton();
         jButton11 = new javax.swing.JButton();
         jButton12 = new javax.swing.JButton();
+        jButton13 = new javax.swing.JButton();
+        jButton14 = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jTextField1 = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
@@ -177,6 +182,36 @@ public class MainForm extends javax.swing.JFrame {
             }
         });
 
+        jButton13.setBackground(new java.awt.Color(102, 102, 255));
+        jButton13.setForeground(new java.awt.Color(255, 255, 255));
+        jButton13.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ias/images/add.png"))); // NOI18N
+        jButton13.setText("New");
+        jButton13.setBorderPainted(false);
+        jButton13.setContentAreaFilled(false);
+        jButton13.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jButton13.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        jButton13.setMargin(new java.awt.Insets(2, 2, 2, 0));
+        jButton13.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton13ActionPerformed(evt);
+            }
+        });
+
+        jButton14.setBackground(new java.awt.Color(102, 102, 255));
+        jButton14.setForeground(new java.awt.Color(255, 255, 255));
+        jButton14.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ias/images/list.png"))); // NOI18N
+        jButton14.setText("List Outgoing");
+        jButton14.setBorderPainted(false);
+        jButton14.setContentAreaFilled(false);
+        jButton14.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jButton14.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        jButton14.setMargin(new java.awt.Insets(2, 2, 2, 0));
+        jButton14.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton14ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -189,7 +224,10 @@ public class MainForm extends javax.swing.JFrame {
             .addComponent(jButton10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jButton12, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButton12, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton13, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton14, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -202,11 +240,15 @@ public class MainForm extends javax.swing.JFrame {
                 .addComponent(jButton8)
                 .addGap(0, 0, 0)
                 .addComponent(jButton9)
-                .addGap(0, 0, 0)
+                .addGap(1, 1, 1)
+                .addComponent(jButton13)
+                .addGap(1, 1, 1)
+                .addComponent(jButton14)
+                .addGap(1, 1, 1)
                 .addComponent(jButton10)
                 .addGap(0, 0, 0)
                 .addComponent(jButton12)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 158, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jButton11))
         );
 
@@ -374,8 +416,14 @@ public class MainForm extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton10ActionPerformed
 
     private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
-       FormOutgoing formOutgoing = new FormOutgoing(this, rootPaneCheckingEnabled);
-       formOutgoing.setVisible(rootPaneCheckingEnabled);
+       if(jButton13.isVisible() && jButton14.isVisible()){
+           jButton13.setVisible(false);
+           jButton14.setVisible(false);
+       }
+       else {
+           jButton13.setVisible(true);
+           jButton14.setVisible(true);
+       }
        
     }//GEN-LAST:event_jButton9ActionPerformed
 
@@ -425,6 +473,16 @@ public class MainForm extends javax.swing.JFrame {
        formNewPic.setVisible(rootPaneCheckingEnabled);
     }//GEN-LAST:event_jButton12ActionPerformed
 
+    private void jButton13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton13ActionPerformed
+       FormOutgoing formOutgoing = new FormOutgoing(this, rootPaneCheckingEnabled);
+       formOutgoing.setVisible(rootPaneCheckingEnabled);
+    }//GEN-LAST:event_jButton13ActionPerformed
+
+    private void jButton14ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton14ActionPerformed
+       FormListOutgoing formListOutgoing = new FormListOutgoing(this, rootPaneCheckingEnabled);
+       formListOutgoing.setVisible(rootPaneCheckingEnabled);
+    }//GEN-LAST:event_jButton14ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -465,6 +523,8 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JButton jButton10;
     private javax.swing.JButton jButton11;
     private javax.swing.JButton jButton12;
+    private javax.swing.JButton jButton13;
+    private javax.swing.JButton jButton14;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;

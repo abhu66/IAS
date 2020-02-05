@@ -29,8 +29,11 @@ import javax.swing.JOptionPane;
 public class TransactionDaoImpl implements TransactionDao{
 
     
-    String query_insert_new         = "INSERT INTO transaction values(null,?,?,?,?,?,?,?)";
-    String query_list_tr            = "SELECT * FROM transaction where tr_number = ?";
+    String query_insert_new             = "INSERT INTO transaction values(null,?,?,?,?,?,?,?)";
+    String query_list_tr                = "SELECT * FROM transaction where tr_number = ?";
+    String query_update_status_asset    = "UPDATE asset set status = ? where code = ?";
+    String query_delete_transaction     = "DELETE FROM transaction where tr_number = ?";
+    String query_remove_item            = "DELETE FROM transaction where id_asset = ?";
    
     PreparedStatement ps;
     ResultSet rs;
@@ -52,6 +55,11 @@ public class TransactionDaoImpl implements TransactionDao{
              ps.setString(5, new SimpleDateFormat("yyyy-MM-dd").format(transaction.getEndDate()));
             ps.setString(6,transaction.getStatus());
             ps.setString(7, transaction.getType());
+            ps.executeUpdate();
+            ps.close();
+            ps = conn.prepareStatement(query_update_status_asset);
+            ps.setString(1, transaction.getStatus());
+            ps.setString(2, transaction.getAsset_id());
             ps.executeUpdate();
             JOptionPane.showMessageDialog(formOutgoing, "Tambah data berhasil !");
         } catch (SQLException ex) {
@@ -85,5 +93,34 @@ public class TransactionDaoImpl implements TransactionDao{
             Logger.getLogger(TransactionDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
         }   
         return listTransaction; 
+    }
+
+    @Override
+    public void deleteTransaction(String tr_number) {
+        try {
+            ps = conn.prepareStatement(query_delete_transaction);
+            ps.setString(1, tr_number);
+            ps.executeUpdate();
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Gagal membatalkan transaksi ! "+ex.getMessage());
+            Logger.getLogger(TransactionDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
+        } //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void removeItem(String code) {
+        try {
+            ps = conn.prepareStatement(query_remove_item);
+            ps.setString(1, code);
+            ps.executeUpdate();
+            ps.close();
+            ps = conn.prepareStatement(query_update_status_asset);
+            ps.setString(1, "AVAILABLE");
+            ps.setString(2, code);
+            ps.executeUpdate();
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Gagal menghapus item ! "+ex.getMessage());
+            Logger.getLogger(TransactionDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }//To change body of generated methods, choose Tools | Templates.
     }
 }

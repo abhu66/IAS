@@ -6,9 +6,15 @@
 package ias.view;
 
 import ias.daoImpl.AssetDaoImpl;
+import ias.daoImpl.OutgoingDaoImpl;
+import ias.daoImpl.PersonDaoImpl;
+import ias.daoImpl.TransactionDaoImpl;
 import ias.models.Asset;
+import ias.models.Outgoing;
 import ias.models.Person;
+import ias.models.Transaction;
 import java.text.SimpleDateFormat;
+import java.util.HashMap;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -17,41 +23,64 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author asyst
  */
-public class PopUpAsset extends javax.swing.JDialog {
+public class FormListOutgoing extends javax.swing.JDialog {
 
     /**
-     * Creates new form PopUpAsset
+     * Creates new form FormListOutgoing
      */
-    
+     
     public DefaultTableModel tableModel;
-    AssetDaoImpl assetDaoImpl           = new AssetDaoImpl();
-    FormOutgoing formOutgoing;
+    private TransactionDaoImpl transactionDaoImpl   = new TransactionDaoImpl();
+    private AssetDaoImpl assetDaoImpl               = new AssetDaoImpl();
+    private PersonDaoImpl personDaoImpl             = new PersonDaoImpl();
+    private OutgoingDaoImpl outgoingDaoImpl         = new OutgoingDaoImpl();
+    private Person person;
+    private Asset asset;
     
-    public PopUpAsset(java.awt.Frame parent, boolean modal) {
+     HashMap<String, Person> mapPerson       = new HashMap<>();
+    
+    public FormListOutgoing(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        tableAssetMaster();
+        initMapPerson();
+        tableListTransactions();
         setLocationRelativeTo(null);
     }
     
-     public void tableAssetMaster(){
-        String [] header = {"NO","KODE","NAMA","TANGGAL PENGADAAN","KONDISI","STATUS"};
+    public void tableListTransactions(){
+        String [] header = {"NO","NO TRANSAKSI","NAMA PIC","TANGGAL TRANSAKSI","TANGGAL PENGEMBALIAN","TOTAL BARANG","STATUS"};
         tableModel = new DefaultTableModel(null, header);
         jTable1.setModel(tableModel);
-        List<Asset> listAllAsset = assetDaoImpl.getAllAsset(jTextField1.getText());
+        List<Outgoing> listTransaction = outgoingDaoImpl.listAllOutgoing(jTextField1.getText());
         
-        if(listAllAsset != null || !listAllAsset.isEmpty()){
+        if(listTransaction != null || !listTransaction.isEmpty()){
             int number = 1;
-            for(Asset asset : listAllAsset){
+            for(Outgoing outgoing : listTransaction){
                 tableModel.addRow(new Object[]{
                     number++,
-                    asset.code,
-                    asset.name,
-                    new SimpleDateFormat("dd-MMMM-yyyy").format(asset.createdDate),
-                    asset.condition,
-                    asset.status,
+                    outgoing.getTr_number(),
+                    outgoing.getId_pic() + "-"+ mapPerson.get(outgoing.getId_pic()).getName(),
+                    new SimpleDateFormat("dd-MMMM-yyyy").format(outgoing.getStartDate()),
+                    new SimpleDateFormat("dd-MMMM-yyyy").format(outgoing.getEndDate()),
+                    outgoing.getTotal_asset(),
+                    outgoing.getStatus(),
                  });
             }
+        }
+    }
+    
+     private void initMapPerson(){
+        List<Person> listPerson = personDaoImpl.getAllPerson("");
+        if(listPerson != null || !listPerson.isEmpty()){
+            listPerson.forEach((person) -> {
+                String nip = person.getNip();
+                if(!mapPerson.containsKey(nip)){
+                    mapPerson.put(nip, person);
+                }
+                else {
+                    mapPerson.get(nip);
+                }
+            });
         }
     }
 
@@ -70,13 +99,12 @@ public class PopUpAsset extends javax.swing.JDialog {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
-        jButton1.setText("Search");
+        jButton1.setText("Cari");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
@@ -96,17 +124,10 @@ public class PopUpAsset extends javax.swing.JDialog {
         ));
         jScrollPane1.setViewportView(jTable1);
 
-        jButton2.setText("Batal");
+        jButton2.setText("Lihat");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
-            }
-        });
-
-        jButton3.setText("Ok");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
             }
         });
 
@@ -116,39 +137,27 @@ public class PopUpAsset extends javax.swing.JDialog {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jButton2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton3)
-                .addContainerGap(561, Short.MAX_VALUE))
-            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel1Layout.createSequentialGroup()
-                    .addContainerGap()
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jScrollPane1)
-                        .addGroup(jPanel1Layout.createSequentialGroup()
-                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(jButton1)
-                            .addGap(396, 396, 396)))
-                    .addContainerGap()))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 749, Short.MAX_VALUE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton2)))
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap(344, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton2, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jButton3, javax.swing.GroupLayout.Alignment.TRAILING))
-                .addGap(19, 19, 19))
-            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel1Layout.createSequentialGroup()
-                    .addContainerGap()
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jButton1))
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 297, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(70, Short.MAX_VALUE)))
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton1)
+                    .addComponent(jButton2))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -166,32 +175,24 @@ public class PopUpAsset extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-        tableAssetMaster();
+      tableListTransactions();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
-
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        int row = jTable1.getSelectedRow();
+       int row = jTable1.getSelectedRow();
        if(row < 0){
-           JOptionPane.showMessageDialog(rootPane, "Harap Pilih data !");
+           JOptionPane.showMessageDialog(rootPane,"Harap pilih data !");
        }
        else {
-           String code = jTable1.getValueAt(row, 1).toString();
-           Asset asset = assetDaoImpl.finByCode(code);
-           if(asset.status.equalsIgnoreCase("NOT AVAILABLE")){
-               JOptionPane.showMessageDialog(rootPane, "Barang tidak tersedia !");
-           }
-           else {
-           formOutgoing.asset = asset;
-           formOutgoing.jTextField5.setText(asset.getCode()+" - "+asset.getName());
-           this.dispose();
-           }
+           
+           FormOutgoing formOutgoing = new FormOutgoing(null, rootPaneCheckingEnabled);
+           formOutgoing.jTextField6.setText(jTable1.getValueAt(row, 1).toString());
+           person = personDaoImpl.findByNip(jTable1.getValueAt(row, 2).toString().substring(0,jTable1.getValueAt(row, 2).toString().lastIndexOf("-")));
+           formOutgoing.person = person;
+           formOutgoing.setValueFromListTransaction();
+           formOutgoing.setVisible(rootPaneCheckingEnabled);
        }
-    }//GEN-LAST:event_jButton3ActionPerformed
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -210,20 +211,20 @@ public class PopUpAsset extends javax.swing.JDialog {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(PopUpAsset.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FormListOutgoing.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(PopUpAsset.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FormListOutgoing.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(PopUpAsset.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FormListOutgoing.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(PopUpAsset.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FormListOutgoing.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                PopUpAsset dialog = new PopUpAsset(new javax.swing.JFrame(), true);
+                FormListOutgoing dialog = new FormListOutgoing(new javax.swing.JFrame(), true);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
@@ -238,7 +239,6 @@ public class PopUpAsset extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;

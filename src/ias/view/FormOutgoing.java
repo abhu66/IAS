@@ -6,10 +6,12 @@
 package ias.view;
 
 import ias.daoImpl.AssetDaoImpl;
+import ias.daoImpl.LockDaoImpl;
 import ias.daoImpl.OutgoingDaoImpl;
 import ias.daoImpl.PersonDaoImpl;
 import ias.daoImpl.TransactionDaoImpl;
 import ias.models.Asset;
+import ias.models.Lock;
 import ias.models.Outgoing;
 import ias.models.Person;
 import ias.models.Transaction;
@@ -36,8 +38,10 @@ public class FormOutgoing extends javax.swing.JDialog {
     PersonDaoImpl personDaoImpl             = new PersonDaoImpl();
     OutgoingDaoImpl outgoingDaoImpl         = new OutgoingDaoImpl();
     TransactionDaoImpl transactionDaoImpl   = new TransactionDaoImpl();
+    LockDaoImpl lockDaoImpl                 = new LockDaoImpl();
     
     HashMap<String, Asset> mapAsset         = new HashMap<>();
+    HashMap<String, Person> mapPerson       = new HashMap<>();
     
     public Person person;
     public Asset asset;
@@ -46,6 +50,7 @@ public class FormOutgoing extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         setLocationRelativeTo(null);
+        initMapPerson();
         initMapAsset();
         initData();
     }
@@ -63,10 +68,14 @@ public class FormOutgoing extends javax.swing.JDialog {
         outgoing.setStartDate(jDateChooser1.getDate());
         outgoingDaoImpl.addNewOutgoing(outgoing);
         jTextField6.setText(tr_number);
+        
+        Lock lock = new Lock(0, false, tr_number);
+        lockDaoImpl.addNew(lock);
+        
     }
     
     public void tableTransactionOutgoing(){
-        String [] header = {"NO","NO. TRANSAKSI","NAMA BARANG","TANGGAL PINJAM","TANGGAL KEMBALI","STATUS"};
+        String [] header = {"NO","NO. TRANSAKSI","KODE BARANG","NAMA BARANG","TANGGAL PINJAM","TANGGAL KEMBALI","STATUS"};
         tableModel = new DefaultTableModel(null, header);
         jTable1.setModel(tableModel);
         List<Transaction> listTransaction = transactionDaoImpl.listTransaction(jTextField6.getText());
@@ -77,6 +86,7 @@ public class FormOutgoing extends javax.swing.JDialog {
                 tableModel.addRow(new Object[]{
                     number++,
                     transaction.getTr_number(),
+                     mapAsset.get(transaction.getAsset_id()).code,
                     mapAsset.get(transaction.getAsset_id()).name,
                     new SimpleDateFormat("dd-MMMM-yyyy").format(transaction.getStarDate()),
                     new SimpleDateFormat("dd-MMMM-yyyy").format(transaction.getEndDate()),
@@ -100,6 +110,20 @@ public class FormOutgoing extends javax.swing.JDialog {
             });
         }
     }
+    private void initMapPerson(){
+        List<Person> listPerson = personDaoImpl.getAllPerson("");
+        if(listPerson != null || !listPerson.isEmpty()){
+            listPerson.forEach((person) -> {
+                String nip = person.getNip();
+                if(!mapPerson.containsKey(nip)){
+                    mapPerson.put(nip, person);
+                }
+                else {
+                    mapPerson.get(nip);
+                }
+            });
+        }
+    }
     
     private void addNew(){
         Transaction transaction = 
@@ -117,6 +141,61 @@ public class FormOutgoing extends javax.swing.JDialog {
         tableTransactionOutgoing();
         int countRow = jTable1.getRowCount();
         jTextField8.setText(String.valueOf(countRow));
+        
+        Outgoing outgoing = outgoingDaoImpl.findByTrNUmber(jTextField6.getText());
+        System.out.println("outgoing : "+outgoing.getTr_number());
+        if(outgoing != null){
+            outgoing.setStatus("TIDAK KOMPLIT");
+            outgoing.setTotal_asset(countRow);
+            outgoingDaoImpl.updateOutgoing(outgoing);
+        }
+    }
+    
+    public void setValueFromListTransaction(){
+        
+        String [] header = {"NO","NO. TRANSAKSI","KODE BARANG","NAMA BARANG","TANGGAL PINJAM","TANGGAL KEMBALI","STATUS"};
+        tableModel = new DefaultTableModel(null, header);
+        jTable1.setModel(tableModel);
+        List<Transaction> listTransaction = transactionDaoImpl.listTransaction(jTextField6.getText());
+      
+        if(listTransaction != null || !listTransaction.isEmpty()){
+            System.out.println("list "+mapPerson.size());
+            jTextField1.setText(mapPerson.get(listTransaction.get(0).getPerson_id()).getNip() +" - "+mapPerson.get(listTransaction.get(0).getPerson_id()).getName());
+            jTextField2.setText(mapPerson.get(listTransaction.get(0).getPerson_id()).getNip());
+            jTextField3.setText(mapPerson.get(listTransaction.get(0).getPerson_id()).getName());
+            jTextField4.setText(mapPerson.get(listTransaction.get(0).getPerson_id()).getRank());
+            jTextField7.setText(mapPerson.get(listTransaction.get(0).getPerson_id()).getPhone_number());
+             
+            int number = 1;
+            for(Transaction transaction : listTransaction){
+                tableModel.addRow(new Object[]{
+                    number++,
+                    transaction.getTr_number(),
+                    mapAsset.get(transaction.getAsset_id()).code,
+                    mapAsset.get(transaction.getAsset_id()).name,
+                    new SimpleDateFormat("dd-MMMM-yyyy").format(transaction.getStarDate()),
+                    new SimpleDateFormat("dd-MMMM-yyyy").format(transaction.getEndDate()),
+                    transaction.getStatus()
+                 });
+            }
+            
+            jTextField8.setText(String.valueOf(jTable1.getRowCount()));
+        }
+        
+        Lock lock = lockDaoImpl.findByTrNumber(jTextField6.getText());
+        System.err.println("lock "+lock.isIsLock());
+        if(lock.isIsLock()){
+            jButton4.setText("Terkunci");
+            jButton4.setEnabled(false);
+            jButton5.setEnabled(false);
+            jButton7.setEnabled(false);
+            jTextField5.setEnabled(false);
+            jButton3.setEnabled(false);
+            jButton1.setEnabled(false);
+            jDateChooser2.setEnabled(false);
+            jComboBox1.setEnabled(false);
+             jButton2.setEnabled(false);
+        }
     }
 
     /**
@@ -156,6 +235,10 @@ public class FormOutgoing extends javax.swing.JDialog {
         jComboBox1 = new javax.swing.JComboBox<>();
         jLabel9 = new javax.swing.JLabel();
         jTextField8 = new javax.swing.JTextField();
+        jButton4 = new javax.swing.JButton();
+        jButton5 = new javax.swing.JButton();
+        jButton6 = new javax.swing.JButton();
+        jButton7 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Form Peminjaman");
@@ -331,6 +414,29 @@ public class FormOutgoing extends javax.swing.JDialog {
 
         jLabel9.setText("Total :");
 
+        jButton4.setText("Kunci");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
+
+        jButton5.setText("Batalkan");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
+
+        jButton6.setText("Cetak");
+
+        jButton7.setText("Hapus Item");
+        jButton7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton7ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -348,9 +454,16 @@ public class FormOutgoing extends javax.swing.JDialog {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton3))
+                        .addComponent(jButton3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton7))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jButton4)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton5)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton6)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel9)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jTextField8, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -370,13 +483,17 @@ public class FormOutgoing extends javax.swing.JDialog {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton2)
-                    .addComponent(jButton3))
+                    .addComponent(jButton3)
+                    .addComponent(jButton7))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel9)
-                    .addComponent(jTextField8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jTextField8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton4)
+                    .addComponent(jButton5)
+                    .addComponent(jButton6))
                 .addContainerGap(41, Short.MAX_VALUE))
         );
 
@@ -427,6 +544,38 @@ public class FormOutgoing extends javax.swing.JDialog {
       
     }//GEN-LAST:event_jButton3ActionPerformed
 
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        Lock lock = new Lock(0, true, jTextField6.getText());
+        lockDaoImpl.updateLock(lock);
+        jButton4.setText("Terkunci");
+            jButton4.setEnabled(false);
+            jButton5.setEnabled(false);
+            jButton7.setEnabled(false);
+            jTextField5.setEnabled(false);
+            jButton3.setEnabled(false);
+            jButton1.setEnabled(false);
+            jDateChooser2.setEnabled(false);
+            jComboBox1.setEnabled(false);
+            jButton2.setEnabled(false);
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+       lockDaoImpl.deleteLock(jTextField6.getText());
+       
+    }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
+        int row = jTable1.getSelectedRow();
+        if(row < 0){
+            JOptionPane.showMessageDialog(rootPane, "Harap pilih data !");
+        }
+        else {
+           transactionDaoImpl.removeItem(jTable1.getValueAt(row, 2).toString());
+        }
+        
+       
+    }//GEN-LAST:event_jButton7ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -473,6 +622,10 @@ public class FormOutgoing extends javax.swing.JDialog {
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
+    private javax.swing.JButton jButton6;
+    private javax.swing.JButton jButton7;
     private javax.swing.JComboBox<String> jComboBox1;
     private com.toedter.calendar.JDateChooser jDateChooser1;
     private com.toedter.calendar.JDateChooser jDateChooser2;
@@ -495,7 +648,7 @@ public class FormOutgoing extends javax.swing.JDialog {
     public javax.swing.JTextField jTextField3;
     public javax.swing.JTextField jTextField4;
     public javax.swing.JTextField jTextField5;
-    private javax.swing.JTextField jTextField6;
+    public javax.swing.JTextField jTextField6;
     public javax.swing.JTextField jTextField7;
     private javax.swing.JTextField jTextField8;
     // End of variables declaration//GEN-END:variables

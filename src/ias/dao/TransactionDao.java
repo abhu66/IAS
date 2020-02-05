@@ -17,5 +17,7 @@ public interface TransactionDao {
     
     public void addNew(Transaction transaction,FormOutgoing formOutgoing);
     public List<Transaction> listTransaction(String param);
+    public void deleteTransaction(String tr_number);
+    public void removeItem(String code);
     
 }
