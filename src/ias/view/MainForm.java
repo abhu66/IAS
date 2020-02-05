@@ -477,12 +477,6 @@ public class MainForm extends javax.swing.JFrame {
 
     private void jButton13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton13ActionPerformed
        FormOutgoing formOutgoing = new FormOutgoing(this, rootPaneCheckingEnabled);
-       formOutgoing.addWindowListener(new WindowAdapter() {
-           @Override
-           public void windowClosed(WindowEvent e) {
-               formOutgoing.batalkan();
-            }
-        });
        formOutgoing.setVisible(rootPaneCheckingEnabled);
     }//GEN-LAST:event_jButton13ActionPerformed
 

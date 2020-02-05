@@ -180,8 +180,12 @@ public class FormListOutgoing extends javax.swing.JDialog {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
        int row = jTable1.getSelectedRow();
-       if(row < 0){
-           JOptionPane.showMessageDialog(rootPane,"Harap pilih data !");
+       if(jTable1.getRowCount() == 0){
+         
+            JOptionPane.showMessageDialog(rootPane,"Data tidak tersedia !");
+       }
+       else if(row < 0){
+            JOptionPane.showMessageDialog(rootPane,"Harap pilih data !");
        }
        else {
            

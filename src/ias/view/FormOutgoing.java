@@ -53,9 +53,29 @@ public class FormOutgoing extends javax.swing.JDialog {
         initMapPerson();
         initMapAsset();
         initData();
+        setDisableField();
     }
     
-    
+    private void setDisableField(){
+        jDateChooser2.setEnabled(false);
+        jTextField5.setEnabled(false);
+        jButton2.setEnabled(false);
+        jButton3.setEnabled(false);
+        jButton7.setEnabled(false);
+        jButton5.setEnabled(false);
+        jButton4.setEnabled(false);
+        jButton6.setEnabled(false);
+    }
+     private void setEnableField(){
+        jDateChooser2.setEnabled(true);
+        jTextField5.setEnabled(true);
+        jButton2.setEnabled(true);
+        jButton3.setEnabled(true);
+        jButton7.setEnabled(true);
+        jButton5.setEnabled(false);
+        jButton4.setEnabled(true);
+        jButton6.setEnabled(true);
+    }
     
     private void initData(){
         jDateChooser1.setDate(new Date());
@@ -128,11 +148,6 @@ public class FormOutgoing extends javax.swing.JDialog {
     }
     
     private void addNew(){
-        if(asset.status.equalsIgnoreCase("TIDAK TERSEDIA")){
-            JOptionPane.showMessageDialog(rootPane, "Asset tidak tersedia !");
-            jTextField5.setText(null);
-        }
-        else {
             Transaction transaction = 
                     new Transaction(
                             0, 
@@ -149,7 +164,9 @@ public class FormOutgoing extends javax.swing.JDialog {
             int countRow = jTable1.getRowCount();
             jTextField8.setText(String.valueOf(countRow));
             updateOutgoing(countRow);
-        } 
+            jTextField5.setText(null);
+            asset = null;
+        
     }
     
     public void updateOutgoing(int countRow){
@@ -197,14 +214,10 @@ public class FormOutgoing extends javax.swing.JDialog {
         System.err.println("lock "+lock.isIsLock());
         if(lock.isIsLock()){
             jButton4.setText("Terkunci");
-            jButton4.setEnabled(false);
-            jButton7.setEnabled(false);
-            jTextField5.setEnabled(false);
-            jButton3.setEnabled(false);
-            jButton1.setEnabled(false);
-            jDateChooser2.setEnabled(false);
-            jComboBox1.setEnabled(false);
-             jButton2.setEnabled(false);
+            setDisableField();
+        }
+        else {
+            setEnableField();
         }
     }
     
@@ -243,6 +256,7 @@ public class FormOutgoing extends javax.swing.JDialog {
         jTextField4 = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
         jTextField7 = new javax.swing.JTextField();
+        jButton5 = new javax.swing.JButton();
         jTextField5 = new javax.swing.JTextField();
         jButton2 = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -296,6 +310,13 @@ public class FormOutgoing extends javax.swing.JDialog {
 
         jTextField7.setEditable(false);
 
+        jButton5.setText("Buat Transaksi");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -318,7 +339,10 @@ public class FormOutgoing extends javax.swing.JDialog {
                             .addComponent(jTextField2, javax.swing.GroupLayout.DEFAULT_SIZE, 245, Short.MAX_VALUE)
                             .addComponent(jTextField3)
                             .addComponent(jTextField4)
-                            .addComponent(jTextField7, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(jTextField7, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jButton5)))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -344,6 +368,8 @@ public class FormOutgoing extends javax.swing.JDialog {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel8)
                     .addComponent(jTextField7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton5)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -432,7 +458,7 @@ public class FormOutgoing extends javax.swing.JDialog {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7)
                     .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(40, Short.MAX_VALUE))
         );
 
         jLabel9.setText("Total :");
@@ -490,10 +516,10 @@ public class FormOutgoing extends javax.swing.JDialog {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton2)
@@ -507,7 +533,7 @@ public class FormOutgoing extends javax.swing.JDialog {
                     .addComponent(jTextField8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton4)
                     .addComponent(jButton6))
-                .addContainerGap(41, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         jPanel1Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jButton2, jButton3});
@@ -520,9 +546,7 @@ public class FormOutgoing extends javax.swing.JDialog {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -589,6 +613,12 @@ public class FormOutgoing extends javax.swing.JDialog {
        
     }//GEN-LAST:event_jButton7ActionPerformed
 
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        generateTrNumber();
+        setEnableField();
+        jButton5.setEnabled(false);
+    }//GEN-LAST:event_jButton5ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -636,6 +666,7 @@ public class FormOutgoing extends javax.swing.JDialog {
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
+    public javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton7;
     private javax.swing.JComboBox<String> jComboBox1;

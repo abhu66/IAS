@@ -147,7 +147,7 @@ public class OutgoingDaoImpl implements OutgoingDao{
                  ps = conn.prepareStatement(query_select_outgoing_all);
              }
              else {
-                 ps = conn.prepareStatement(query_select_outgoing_all);
+                 ps = conn.prepareStatement(query_select_outgoing_by_trnumber);
                  ps.setString(1, param);
              }
             rs = ps.executeQuery();

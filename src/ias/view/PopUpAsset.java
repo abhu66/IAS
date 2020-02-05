@@ -182,7 +182,7 @@ public class PopUpAsset extends javax.swing.JDialog {
        else {
            String code = jTable1.getValueAt(row, 1).toString();
            Asset asset = assetDaoImpl.finByCode(code);
-           if(asset.status.equalsIgnoreCase("NOT AVAILABLE")){
+           if(asset.status.equalsIgnoreCase("TIDAK TERSEDIA")){
                JOptionPane.showMessageDialog(rootPane, "Barang tidak tersedia !");
            }
            else {

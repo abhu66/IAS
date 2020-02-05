@@ -172,7 +172,7 @@ public class PopUpPic extends javax.swing.JDialog {
            formOutgoing.jTextField3.setText(person.getRank());
            formOutgoing.jTextField4.setText(person.getPosition());
            formOutgoing.jTextField7.setText(person.getPhone_number());
-           formOutgoing.generateTrNumber();
+           formOutgoing.jButton5.setEnabled(rootPaneCheckingEnabled);
            this.dispose();
        }
        
