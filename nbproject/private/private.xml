@@ -3,31 +3,13 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/asyst/Documents/NetBeansProjects/IAS/src/ias/view/FormOutgoing.java</file>
-            <file>file:/C:/Users/asyst/Documents/NetBeansProjects/IAS/src/ias/models/Transaction.java</file>
-            <file>file:/C:/Users/asyst/Documents/NetBeansProjects/IAS/src/ias/view/PopUpAsset.java</file>
-            <file>file:/C:/Users/asyst/Documents/NetBeansProjects/IAS/src/ias/dao/PersonDao.java</file>
-            <file>file:/C:/Users/asyst/Documents/NetBeansProjects/IAS/src/ias/view/PopUpPic.java</file>
-            <file>file:/C:/Users/asyst/Documents/NetBeansProjects/IAS/src/ias/view/MainForm.java</file>
-            <file>file:/C:/Users/asyst/Documents/NetBeansProjects/IAS/src/ias/models/Asset.java</file>
-            <file>file:/C:/Users/asyst/Documents/NetBeansProjects/IAS/src/ias/ConnectionMariaDb.java</file>
-            <file>file:/C:/Users/asyst/Documents/NetBeansProjects/IAS/src/ias/dao/OutgoingDao.java</file>
-            <file>file:/C:/Users/asyst/Documents/NetBeansProjects/IAS/src/ias/dao/AssetDao.java</file>
-            <file>file:/C:/Users/asyst/Documents/NetBeansProjects/IAS/src/ias/daoImpl/OutgoingDaoImpl.java</file>
-            <file>file:/C:/Users/asyst/Documents/NetBeansProjects/IAS/src/ias/dao/TransactionDao.java</file>
             <file>file:/C:/Users/asyst/Documents/NetBeansProjects/IAS/src/ias/view/FormIncoming.java</file>
-            <file>file:/C:/Users/asyst/Documents/NetBeansProjects/IAS/src/ias/models/User.java</file>
-            <file>file:/C:/Users/asyst/Documents/NetBeansProjects/IAS/src/ias/view/FormNewAsset.java</file>
-            <file>file:/C:/Users/asyst/Documents/NetBeansProjects/IAS/src/ias/view/FormNewPic.java</file>
-            <file>file:/C:/Users/asyst/Documents/NetBeansProjects/IAS/src/ias/daoImpl/AssetDaoImpl.java</file>
-            <file>file:/C:/Users/asyst/Documents/NetBeansProjects/IAS/src/ias/models/Person.java</file>
-            <file>file:/C:/Users/asyst/Documents/NetBeansProjects/IAS/src/ias/PreferenceUser.java</file>
             <file>file:/C:/Users/asyst/Documents/NetBeansProjects/IAS/src/ias/daoImpl/TransactionDaoImpl.java</file>
-            <file>file:/C:/Users/asyst/Documents/NetBeansProjects/IAS/src/ias/daoImpl/PersonDaoImpl.java</file>
-            <file>file:/C:/Users/asyst/Documents/NetBeansProjects/IAS/src/ias/models/Outgoing.java</file>
-            <file>file:/C:/Users/asyst/Documents/NetBeansProjects/IAS/src/ias/view/FormLogin.java</file>
+            <file>file:/C:/Users/asyst/Documents/NetBeansProjects/IAS/src/ias/view/FormOutgoing.java</file>
+            <file>file:/C:/Users/asyst/Documents/NetBeansProjects/IAS/src/ias/view/MainForm.java</file>
             <file>file:/C:/Users/asyst/Documents/NetBeansProjects/IAS/src/ias/view/FormEditAsset.java</file>
-            <file>file:/C:/Users/asyst/Documents/NetBeansProjects/IAS/src/ias/view/FormViewAsset.java</file>
+            <file>file:/C:/Users/asyst/Documents/NetBeansProjects/IAS/src/ias/dao/OutgoingDao.java</file>
+            <file>file:/C:/Users/asyst/Documents/NetBeansProjects/IAS/src/ias/dao/TransactionDao.java</file>
         </group>
     </open-files>
 </project-private>

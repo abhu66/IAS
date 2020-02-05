@@ -168,6 +168,11 @@ public class MainForm extends javax.swing.JFrame {
         jButton11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ias/images/exit.png"))); // NOI18N
         jButton11.setText("Log Out");
         jButton11.setContentAreaFilled(false);
+        jButton11.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton11ActionPerformed(evt);
+            }
+        });
 
         jButton12.setBackground(new java.awt.Color(102, 102, 255));
         jButton12.setForeground(new java.awt.Color(255, 255, 255));
@@ -240,7 +245,7 @@ public class MainForm extends javax.swing.JFrame {
                 .addComponent(jButton7)
                 .addGap(0, 0, 0)
                 .addComponent(jButton8)
-                .addGap(0, 0, 0)
+                .addGap(1, 1, 1)
                 .addComponent(jButton9)
                 .addGap(1, 1, 1)
                 .addComponent(jButton13)
@@ -250,7 +255,7 @@ public class MainForm extends javax.swing.JFrame {
                 .addComponent(jButton10)
                 .addGap(0, 0, 0)
                 .addComponent(jButton12)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 112, Short.MAX_VALUE)
                 .addComponent(jButton11))
         );
 
@@ -484,6 +489,13 @@ public class MainForm extends javax.swing.JFrame {
        FormListOutgoing formListOutgoing = new FormListOutgoing(this, rootPaneCheckingEnabled);
        formListOutgoing.setVisible(rootPaneCheckingEnabled);
     }//GEN-LAST:event_jButton14ActionPerformed
+
+    private void jButton11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton11ActionPerformed
+      int option = JOptionPane.showConfirmDialog(rootPane,"Yakin ingin keluar dari aplikasi ?","Konfimrasi",JOptionPane.YES_NO_OPTION);
+      if(option == JOptionPane.YES_OPTION){
+          System.exit(0);
+      }
+    }//GEN-LAST:event_jButton11ActionPerformed
 
     /**
      * @param args the command line arguments

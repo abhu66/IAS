@@ -19,5 +19,6 @@ public interface TransactionDao {
     public List<Transaction> listTransaction(String param);
     public void deleteTransaction(String tr_number);
     public void removeItem(String code);
+    public Transaction findByIdAsset(String id_asset);
     
 }

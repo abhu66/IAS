@@ -7,11 +7,9 @@ package ias.daoImpl;
 
 import ias.ConnectionMariaDb;
 import ias.dao.TransactionDao;
-import ias.models.Asset;
 import ias.models.Transaction;
 import ias.view.FormOutgoing;
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -28,12 +26,12 @@ import javax.swing.JOptionPane;
  */
 public class TransactionDaoImpl implements TransactionDao{
 
-    
     String query_insert_new             = "INSERT INTO transaction values(null,?,?,?,?,?,?,?)";
     String query_list_tr                = "SELECT * FROM transaction where tr_number = ?";
     String query_update_status_asset    = "UPDATE asset set status = ? where code = ?";
     String query_delete_transaction     = "DELETE FROM transaction where tr_number = ?";
     String query_remove_item            = "DELETE FROM transaction where id_asset = ?";
+    String query_findby_asset_id        = "SELECT * FROM transaction where id_asset = ? and status = ?";
    
     PreparedStatement ps;
     ResultSet rs;
@@ -94,7 +92,7 @@ public class TransactionDaoImpl implements TransactionDao{
         }   
         return listTransaction; 
     }
-
+    
     @Override
     public void deleteTransaction(String tr_number) {
         try {
@@ -122,5 +120,32 @@ public class TransactionDaoImpl implements TransactionDao{
             JOptionPane.showMessageDialog(null, "Gagal menghapus item ! "+ex.getMessage());
             Logger.getLogger(TransactionDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
         }//To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Transaction findByIdAsset(String id_asset) {
+        Transaction transaction = null;
+        try {
+            ps = conn.prepareStatement(query_findby_asset_id);
+            ps.setString(1, id_asset);
+            ps.setString(2, "TIDAK TERSEDIA");
+            rs = ps.executeQuery();
+            if(rs.next()){
+              transaction =  new Transaction(
+                         rs.getInt("id"),
+                         rs.getString("tr_number"),
+                         rs.getString("id_pic"),
+                         rs.getString("id_asset"),  
+                         rs.getDate("start_date"),
+                         rs.getDate("end_date"),
+                         rs.getString("status"),
+                         rs.getString("type"));
+
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(PersonDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return transaction;
     }
 }
