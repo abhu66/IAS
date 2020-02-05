@@ -19,4 +19,5 @@ public interface AssetDao {
     public List<Asset> getAllAsset(String param);
     public Asset finByCode(String code);
     public void saveOnEdit(Asset asset, FormEditAsset formEditAsset);
+    public void updateStatus(String code);
 }

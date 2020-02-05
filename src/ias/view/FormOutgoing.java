@@ -141,7 +141,12 @@ public class FormOutgoing extends javax.swing.JDialog {
         tableTransactionOutgoing();
         int countRow = jTable1.getRowCount();
         jTextField8.setText(String.valueOf(countRow));
+        updateOutgoing(countRow);
         
+        
+    }
+    
+    public void updateOutgoing(int countRow){
         Outgoing outgoing = outgoingDaoImpl.findByTrNUmber(jTextField6.getText());
         System.out.println("outgoing : "+outgoing.getTr_number());
         if(outgoing != null){
@@ -560,7 +565,22 @@ public class FormOutgoing extends javax.swing.JDialog {
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-       lockDaoImpl.deleteLock(jTextField6.getText());
+       int option = JOptionPane.showConfirmDialog(rootPane,"Anda yakin ingin membatalkan ?","Batalkan ?",JOptionPane.YES_NO_OPTION);
+       if(option == JOptionPane.OK_OPTION){
+            lockDaoImpl.deleteLock(jTextField6.getText());
+            List<Transaction> listTransaction = transactionDaoImpl.listTransaction(jTextField6.getText());
+            for(Transaction transaction : listTransaction){
+                assetDaoImpl.updateStatus(transaction.getAsset_id());
+            }
+            
+            transactionDaoImpl.deleteTransaction(jTextField6.getText());
+            outgoingDaoImpl.deleteOutgoing(jTextField6.getText());
+            
+            dispose();
+       }
+       
+     
+      
        
     }//GEN-LAST:event_jButton5ActionPerformed
 
@@ -571,6 +591,10 @@ public class FormOutgoing extends javax.swing.JDialog {
         }
         else {
            transactionDaoImpl.removeItem(jTable1.getValueAt(row, 2).toString());
+           tableTransactionOutgoing();
+            int countRow = jTable1.getRowCount();
+            jTextField8.setText(String.valueOf(countRow));
+            updateOutgoing(countRow);           
         }
         
        

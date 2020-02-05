@@ -33,7 +33,8 @@ public class AssetDaoImpl implements AssetDao{
     String query_list_asset_all     = "SELECT * FROM Asset ORDER BY code DESC";
     String query_find_by_code       = "SELECT * FROM Asset where code = ?";
     String query_update_asset       = "UPDATE Asset set code = ?, name = ? ,description = ?, conditions = ? where id = ? ";
-  
+    String query_update_status      = "UPDATE asset set status = ? where code = ?";
+    
     PreparedStatement ps;
     ResultSet rs;
     Connection conn;
@@ -132,6 +133,20 @@ public class AssetDaoImpl implements AssetDao{
             ps.executeUpdate();
             JOptionPane.showMessageDialog(null, "Berhasil diubah !");
             formEditAsset.dispose();
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Gagal diubah ! "+ex.getMessage());
+            Logger.getLogger(AssetDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }//To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void updateStatus(String code) {
+        try {
+            ps = conn.prepareStatement(query_update_status);
+            ps.setString(1,"AVAILABLE");
+            ps.setString(2, code);
+         
+            ps.executeUpdate();
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Gagal diubah ! "+ex.getMessage());
             Logger.getLogger(AssetDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
