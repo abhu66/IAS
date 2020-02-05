@@ -143,7 +143,7 @@ public class AssetDaoImpl implements AssetDao{
     public void updateStatus(String code) {
         try {
             ps = conn.prepareStatement(query_update_status);
-            ps.setString(1,"AVAILABLE");
+            ps.setString(1,"TERSEDIA");
             ps.setString(2, code);
          
             ps.executeUpdate();

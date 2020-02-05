@@ -30,9 +30,9 @@ public class OutgoingDaoImpl implements OutgoingDao{
     String query_generate_number                = "SELECT * FROM tr_outgoing order by tr_number desc";
     String query_update_outgoing                = "UPDATE tr_outgoing set total_asset = ?, status = ? where tr_number = ?";
     String query_find_by_trnumber               = "SELECT * FROM tr_outgoing where tr_number = ?";
-    String query_select_outgoing_all            = "SELECT * FROM tr_outgoing";
-    String query_select_outgoing_by_trnumber    = "SELECT * FROM tr_outgoing where tr_number = ?" ;
-    String query_delete_outgoing                = "DELETE FROM tr_outgoing where tr_number = ?";
+    String query_select_outgoing_all            = "SELECT * FROM tr_outgoing WHERE status != 'DIBATALKAN'";
+    String query_select_outgoing_by_trnumber    = "SELECT * FROM tr_outgoing where tr_number = ? AND status != 'DIBATALKAN'" ;
+    String query_delete_outgoing                = "UPDATE tr_outgoing SET status = ? where tr_number = ?";
    
     PreparedStatement ps;
     ResultSet rs;
@@ -175,7 +175,8 @@ public class OutgoingDaoImpl implements OutgoingDao{
     public void deleteOutgoing(String tr_number) {
       try {
             ps = conn.prepareStatement(query_delete_outgoing);
-            ps.setString(1, tr_number);
+            ps.setString(1, "DIBATALKAN");
+            ps.setString(2, tr_number);
             ps.executeUpdate();
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Gagal membatalkan outgoing ! "+ex.getMessage());

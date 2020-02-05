@@ -115,7 +115,7 @@ public class TransactionDaoImpl implements TransactionDao{
             ps.executeUpdate();
             ps.close();
             ps = conn.prepareStatement(query_update_status_asset);
-            ps.setString(1, "AVAILABLE");
+            ps.setString(1, "TERSEDIA");
             ps.setString(2, code);
             ps.executeUpdate();
         } catch (SQLException ex) {

@@ -9,6 +9,8 @@ import ias.PreferenceUser;
 import ias.daoImpl.AssetDaoImpl;
 import ias.models.Asset;
 import java.awt.Dimension;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import javax.swing.JOptionPane;
@@ -475,6 +477,12 @@ public class MainForm extends javax.swing.JFrame {
 
     private void jButton13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton13ActionPerformed
        FormOutgoing formOutgoing = new FormOutgoing(this, rootPaneCheckingEnabled);
+       formOutgoing.addWindowListener(new WindowAdapter() {
+           @Override
+           public void windowClosed(WindowEvent e) {
+               formOutgoing.batalkan();
+            }
+        });
        formOutgoing.setVisible(rootPaneCheckingEnabled);
     }//GEN-LAST:event_jButton13ActionPerformed
 

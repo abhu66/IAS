@@ -55,6 +55,8 @@ public class FormOutgoing extends javax.swing.JDialog {
         initData();
     }
     
+    
+    
     private void initData(){
         jDateChooser1.setDate(new Date());
     }
@@ -126,24 +128,28 @@ public class FormOutgoing extends javax.swing.JDialog {
     }
     
     private void addNew(){
-        Transaction transaction = 
-                new Transaction(
-                        0, 
-                        jTextField6.getText(),
-                        person.getNip(),
-                        asset.getCode(),
-                        jDateChooser1.getDate(),
-                        jDateChooser2.getDate(), 
-                        "NOT AVAILABLE", 
-                        jComboBox1.getSelectedItem().toString());
-        
-        transactionDaoImpl.addNew(transaction, this);
-        tableTransactionOutgoing();
-        int countRow = jTable1.getRowCount();
-        jTextField8.setText(String.valueOf(countRow));
-        updateOutgoing(countRow);
-        
-        
+        if(asset.status.equalsIgnoreCase("TIDAK TERSEDIA")){
+            JOptionPane.showMessageDialog(rootPane, "Asset tidak tersedia !");
+            jTextField5.setText(null);
+        }
+        else {
+            Transaction transaction = 
+                    new Transaction(
+                            0, 
+                            jTextField6.getText(),
+                            person.getNip(),
+                            asset.getCode(),
+                            jDateChooser1.getDate(),
+                            jDateChooser2.getDate(), 
+                            "TIDAK TERSEDIA", 
+                            jComboBox1.getSelectedItem().toString());
+
+            transactionDaoImpl.addNew(transaction, this);
+            tableTransactionOutgoing();
+            int countRow = jTable1.getRowCount();
+            jTextField8.setText(String.valueOf(countRow));
+            updateOutgoing(countRow);
+        } 
     }
     
     public void updateOutgoing(int countRow){
@@ -192,7 +198,6 @@ public class FormOutgoing extends javax.swing.JDialog {
         if(lock.isIsLock()){
             jButton4.setText("Terkunci");
             jButton4.setEnabled(false);
-            jButton5.setEnabled(false);
             jButton7.setEnabled(false);
             jTextField5.setEnabled(false);
             jButton3.setEnabled(false);
@@ -201,6 +206,20 @@ public class FormOutgoing extends javax.swing.JDialog {
             jComboBox1.setEnabled(false);
              jButton2.setEnabled(false);
         }
+    }
+    
+    public void batalkan(){
+         int option = JOptionPane.showConfirmDialog(rootPane,"Anda yakin ingin membatalkan ?","Batalkan ?",JOptionPane.YES_NO_OPTION);
+            if(option == JOptionPane.OK_OPTION){
+                 lockDaoImpl.deleteLock(jTextField6.getText());
+                 List<Transaction> listTransaction = transactionDaoImpl.listTransaction(jTextField6.getText());
+                 for(Transaction transaction : listTransaction){
+                     assetDaoImpl.updateStatus(transaction.getAsset_id());
+                 }
+
+                 transactionDaoImpl.deleteTransaction(jTextField6.getText());
+                 outgoingDaoImpl.deleteOutgoing(jTextField6.getText());
+            }
     }
 
     /**
@@ -241,7 +260,6 @@ public class FormOutgoing extends javax.swing.JDialog {
         jLabel9 = new javax.swing.JLabel();
         jTextField8 = new javax.swing.JTextField();
         jButton4 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
         jButton6 = new javax.swing.JButton();
         jButton7 = new javax.swing.JButton();
 
@@ -426,13 +444,6 @@ public class FormOutgoing extends javax.swing.JDialog {
             }
         });
 
-        jButton5.setText("Batalkan");
-        jButton5.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton5ActionPerformed(evt);
-            }
-        });
-
         jButton6.setText("Cetak");
 
         jButton7.setText("Hapus Item");
@@ -465,10 +476,8 @@ public class FormOutgoing extends javax.swing.JDialog {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addComponent(jButton4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton5)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jButton6)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLabel9)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jTextField8, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -497,7 +506,6 @@ public class FormOutgoing extends javax.swing.JDialog {
                     .addComponent(jLabel9)
                     .addComponent(jTextField8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton4)
-                    .addComponent(jButton5)
                     .addComponent(jButton6))
                 .addContainerGap(41, Short.MAX_VALUE))
         );
@@ -545,6 +553,7 @@ public class FormOutgoing extends javax.swing.JDialog {
        }
        else {
            addNew();
+         
        }
       
     }//GEN-LAST:event_jButton3ActionPerformed
@@ -554,7 +563,7 @@ public class FormOutgoing extends javax.swing.JDialog {
         lockDaoImpl.updateLock(lock);
         jButton4.setText("Terkunci");
             jButton4.setEnabled(false);
-            jButton5.setEnabled(false);
+          
             jButton7.setEnabled(false);
             jTextField5.setEnabled(false);
             jButton3.setEnabled(false);
@@ -563,26 +572,6 @@ public class FormOutgoing extends javax.swing.JDialog {
             jComboBox1.setEnabled(false);
             jButton2.setEnabled(false);
     }//GEN-LAST:event_jButton4ActionPerformed
-
-    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-       int option = JOptionPane.showConfirmDialog(rootPane,"Anda yakin ingin membatalkan ?","Batalkan ?",JOptionPane.YES_NO_OPTION);
-       if(option == JOptionPane.OK_OPTION){
-            lockDaoImpl.deleteLock(jTextField6.getText());
-            List<Transaction> listTransaction = transactionDaoImpl.listTransaction(jTextField6.getText());
-            for(Transaction transaction : listTransaction){
-                assetDaoImpl.updateStatus(transaction.getAsset_id());
-            }
-            
-            transactionDaoImpl.deleteTransaction(jTextField6.getText());
-            outgoingDaoImpl.deleteOutgoing(jTextField6.getText());
-            
-            dispose();
-       }
-       
-     
-      
-       
-    }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
         int row = jTable1.getSelectedRow();
@@ -647,7 +636,6 @@ public class FormOutgoing extends javax.swing.JDialog {
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton7;
     private javax.swing.JComboBox<String> jComboBox1;
