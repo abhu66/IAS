@@ -2,14 +2,6 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group>
-            <file>file:/C:/Users/asyst/Documents/NetBeansProjects/IAS/src/ias/view/FormIncoming.java</file>
-            <file>file:/C:/Users/asyst/Documents/NetBeansProjects/IAS/src/ias/daoImpl/TransactionDaoImpl.java</file>
-            <file>file:/C:/Users/asyst/Documents/NetBeansProjects/IAS/src/ias/view/FormOutgoing.java</file>
-            <file>file:/C:/Users/asyst/Documents/NetBeansProjects/IAS/src/ias/view/MainForm.java</file>
-            <file>file:/C:/Users/asyst/Documents/NetBeansProjects/IAS/src/ias/view/FormEditAsset.java</file>
-            <file>file:/C:/Users/asyst/Documents/NetBeansProjects/IAS/src/ias/dao/OutgoingDao.java</file>
-            <file>file:/C:/Users/asyst/Documents/NetBeansProjects/IAS/src/ias/dao/TransactionDao.java</file>
-        </group>
+        <group/>
     </open-files>
 </project-private>
