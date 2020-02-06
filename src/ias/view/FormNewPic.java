@@ -29,6 +29,7 @@ public class FormNewPic extends javax.swing.JDialog {
         initComponents();
         setLocationRelativeTo(null);
         tablePerson();
+        jButton5.setEnabled(false);
     }
     
      public void tablePerson(){
@@ -50,6 +51,7 @@ public class FormNewPic extends javax.swing.JDialog {
                  });
             }
         }
+         jButton5.setEnabled(false);
     }
 
     /**
@@ -108,6 +110,11 @@ public class FormNewPic extends javax.swing.JDialog {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTable1MouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(jTable1);
 
         jButton1.setText("Cari");
@@ -119,6 +126,11 @@ public class FormNewPic extends javax.swing.JDialog {
         jButton4.setText("Hapus");
 
         jButton5.setText("Ubah");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
 
         jButton6.setText("Simpan");
         jButton6.addActionListener(new java.awt.event.ActionListener() {
@@ -242,6 +254,35 @@ public class FormNewPic extends javax.swing.JDialog {
        personDaoImpl.addNewPic(person, this);
        
     }//GEN-LAST:event_jButton6ActionPerformed
+
+    private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
+        jButton5.setEnabled(rootPaneCheckingEnabled);
+        int row = jTable1.getSelectedRow();
+       
+        String nip          = jTable1.getValueAt(row, 1).toString();
+        String name         = jTable1.getValueAt(row, 2).toString();
+        String rank         = jTable1.getValueAt(row, 3).toString();
+        String position     = jTable1.getValueAt(row, 4).toString();
+        String phoneNumber  = jTable1.getValueAt(row, 5).toString();
+        
+        jTextField1.setText(nip);
+        jTextField1.setEnabled(false);
+        jTextField2.setText(name);
+        jTextField3.setText(rank);
+        jTextField4.setText(position);
+        jTextField5.setText(phoneNumber);
+    }//GEN-LAST:event_jTable1MouseClicked
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+       Person person = new Person(0, 
+               jTextField1.getText(), 
+               jTextField2.getText(), 
+               jTextField3.getText(), 
+               jTextField4.getText(),
+               jTextField5.getText());
+       personDaoImpl.saveOnEdit(person);
+       tablePerson();
+    }//GEN-LAST:event_jButton5ActionPerformed
 
     /**
      * @param args the command line arguments

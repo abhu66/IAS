@@ -29,7 +29,7 @@ import javax.swing.JOptionPane;
 public class AssetDaoImpl implements AssetDao{
     
     String query_insert_new         = "INSERT INTO Asset values(null,?,?,?,?,?,?)";
-    String query_list_asset         = "SELECT * FROM Asset WHERE code = ? or name = ?";
+    String query_list_asset         = "SELECT * FROM Asset";
     String query_list_asset_all     = "SELECT * FROM Asset ORDER BY code DESC";
     String query_find_by_code       = "SELECT * FROM Asset where code = ?";
     String query_update_asset       = "UPDATE Asset set code = ?, name = ? ,description = ?, conditions = ? where id = ? ";
@@ -67,13 +67,20 @@ public class AssetDaoImpl implements AssetDao{
     public List<Asset> getAllAsset(String param) {
         List<Asset> listAsset = new ArrayList<>();
         try {
+            
+            String query = query_list_asset;
+            StringBuilder sb = new StringBuilder();
+            sb.append(query);
             if(param.length() == 0 || param.isEmpty() || param == null){
-               ps = conn.prepareStatement(query_list_asset_all);
+               ps = conn.prepareStatement(sb.toString());
             }
             else {
-                 ps = conn.prepareStatement(query_list_asset);
-                 ps.setString(1, param);
-                 ps.setString(2, param);
+                sb.append(" where code = ? or name like '%").append(param).append("%'");
+                System.out.println("Query = "+sb.toString());
+                ps = conn.prepareStatement(sb.toString());
+                ps.setString(1, param);
+                 
+               
 
             }
             rs = ps.executeQuery();

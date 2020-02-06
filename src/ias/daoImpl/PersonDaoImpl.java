@@ -30,7 +30,7 @@ public class PersonDaoImpl implements PersonDao{
     String query_list_person            = "SELECT * FROM Person WHERE nip = ? or name = ?";
     String query_list_person_all        = "SELECT * FROM Person ORDER BY id DESC";
     String query_find_by_nip            = "SELECT * FROM Person where nip = ?";
-    String query_update_person          = "UPDATE Person set nip = ?, name = ? ,rank = ?, position = ?,phone_number = ? where id = ? ";
+    String query_update_person          = "UPDATE Person set name = ? ,rank = ?, position = ?,phone_number = ? where nip = ? ";
   
     PreparedStatement ps;
     ResultSet rs;
@@ -117,7 +117,21 @@ public class PersonDaoImpl implements PersonDao{
 
     @Override
     public void saveOnEdit(Person person) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+       try {
+            ps = conn.prepareStatement(query_update_person);
+  
+            ps.setString(1, person.getName());
+            ps.setString(2, person.getRank());
+            ps.setString(3, person.getPosition());
+            ps.setString(4, person.getPhone_number());
+            ps.setString(5, person.getNip());
+            ps.executeUpdate();
+            JOptionPane.showMessageDialog(null, "Berhasil diubah !");
+            //formNewPic.tablePerson();
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Gagal diubah ! "+ex.getMessage());
+            Logger.getLogger(PersonDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     
