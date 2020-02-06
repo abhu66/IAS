@@ -10,6 +10,7 @@ import ias.PreferenceUser;
 import ias.models.User;
 import java.awt.Color;
 import java.awt.Image;
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -75,6 +76,12 @@ public class FormLogin extends javax.swing.JDialog {
 
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ias/images/shield.png"))); // NOI18N
+
+        jPasswordField1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jPasswordField1KeyPressed(evt);
+            }
+        });
 
         jButton2.setText("Log In");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -196,6 +203,41 @@ public class FormLogin extends javax.swing.JDialog {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
        System.exit(0);
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jPasswordField1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jPasswordField1KeyPressed
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            try {
+                String username = jTextField1.getText();
+                String password = jPasswordField1.getText();
+                String queryLogin = "SELECT * FROM user where username = ? and password = md5(?)";
+
+                PreparedStatement ps = ConnectionMariaDb.getConnection().prepareCall(queryLogin);
+                ps.setString(1, username);
+                ps.setString(2, password);
+                ResultSet rs = ps.executeQuery();
+                if (rs.next()) {
+                    User user = new User(
+                            rs.getInt("id"),
+                            rs.getString("username"),
+                            rs.getString("role"),
+                            rs.getString("name"));
+
+                    //set preperences
+                    PreferenceUser prefsUser = new PreferenceUser();
+                    prefsUser.setPreference(user);
+
+                    MainForm mainForm = new MainForm();
+                    mainForm.setVisible(rootPaneCheckingEnabled);
+                    dispose();
+                } else {
+                    JOptionPane.showMessageDialog(null, "Username atau Password salah !");
+                    jTextField1.requestFocus();
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(FormLogin.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }//GEN-LAST:event_jPasswordField1KeyPressed
 
     /**
      * @param args the command line arguments
