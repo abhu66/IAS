@@ -31,7 +31,7 @@ public class OutgoingDaoImpl implements OutgoingDao{
     String query_update_outgoing                = "UPDATE tr_outgoing set total_asset = ?, status = ? where tr_number = ?";
     String query_find_by_trnumber               = "SELECT * FROM tr_outgoing where tr_number = ?";
     String query_select_outgoing_all            = "SELECT * FROM tr_outgoing WHERE status != 'DIBATALKAN'";
-    String query_select_outgoing_by_trnumber    = "SELECT * FROM tr_outgoing where tr_number = ? AND status != 'DIBATALKAN'" ;
+    String query_select_outgoing_by_trnumber    = "SELECT * FROM tr_outgoing where (tr_number = ? or id_pic = ?) AND status != 'DIBATALKAN'" ;
     String query_delete_outgoing                = "UPDATE tr_outgoing SET status = ? where tr_number = ?";
    
     PreparedStatement ps;
@@ -149,6 +149,7 @@ public class OutgoingDaoImpl implements OutgoingDao{
              else {
                  ps = conn.prepareStatement(query_select_outgoing_by_trnumber);
                  ps.setString(1, param);
+                 ps.setString(2,param);
              }
             rs = ps.executeQuery();
             while(rs.next()){

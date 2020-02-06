@@ -402,8 +402,10 @@ public class MainForm extends javax.swing.JFrame {
 //        incomingForm.setLocation((desktopSize.width - jInternalFrameSize.width)/2,
 //            (desktopSize.height- jInternalFrameSize.height)/2);
 //        incomingForm.setVisible(rootPaneCheckingEnabled);
-        FormIncoming formIncoming = new FormIncoming(this, rootPaneCheckingEnabled);
-        formIncoming.setVisible(rootPaneCheckingEnabled);
+//        FormIncoming formIncoming = new FormIncoming(this, rootPaneCheckingEnabled);
+//        formIncoming.setVisible(rootPaneCheckingEnabled);
+          FormListIncoming incomingForm = new FormListIncoming(this, rootPaneCheckingEnabled);
+          incomingForm.setVisible(rootPaneCheckingEnabled);
 
 
     }//GEN-LAST:event_jButton8ActionPerformed

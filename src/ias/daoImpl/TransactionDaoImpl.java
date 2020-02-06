@@ -31,6 +31,7 @@ public class TransactionDaoImpl implements TransactionDao{
     String query_update_status_asset    = "UPDATE asset set status = ? where code = ?";
     String query_delete_transaction     = "DELETE FROM transaction where tr_number = ?";
     String query_remove_item            = "DELETE FROM transaction where id_asset = ?";
+    String query_incoming               = "UPDATE transaction set status = ? where id = ?";
     String query_findby_asset_id        = "SELECT * FROM transaction where id_asset = ? and status = ?";
    
     PreparedStatement ps;
@@ -112,6 +113,7 @@ public class TransactionDaoImpl implements TransactionDao{
             ps.setString(1, code);
             ps.executeUpdate();
             ps.close();
+            
             ps = conn.prepareStatement(query_update_status_asset);
             ps.setString(1, "TERSEDIA");
             ps.setString(2, code);
@@ -147,5 +149,24 @@ public class TransactionDaoImpl implements TransactionDao{
         }
         
         return transaction;
+    }
+    
+    public void updateStatusAssetInTransaction(int id_tr,String id_asset){
+        try {
+            ps = conn.prepareStatement(query_incoming);
+            ps.setString(1, "TERSEDIA");
+            ps.setInt(2, id_tr);
+            ps.executeUpdate();
+            ps.close();
+            
+            ps = conn.prepareStatement(query_update_status_asset);
+            ps.setString(1, "TERSEDIA");
+            ps.setString(2, id_asset);
+            ps.executeUpdate();
+            JOptionPane.showMessageDialog(null, "Barang berhasil dikembalikan !");
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Gagal update transaksi ! "+ex.getMessage());
+            Logger.getLogger(TransactionDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }
