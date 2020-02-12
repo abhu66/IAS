@@ -32,7 +32,7 @@ public class PopUpPic extends javax.swing.JDialog {
     }
     
      public void tablePerson(){
-        String [] header = {"NO","NIP","NAMA","PANGKAT","JABATAN","NO.HP"};
+        String [] header = {"NO","NRP","NAMA","PANGKAT","SATUAN","NO.HP"};
         tableModel = new DefaultTableModel(null, header);
         jTable1.setModel(tableModel);
         List<ias.models.Person> listAllPerson = personDaoImpl.getAllPerson(jTextField6.getText());
@@ -170,9 +170,10 @@ public class PopUpPic extends javax.swing.JDialog {
            formOutgoing.jTextField1.setText(person.getNip()+" - "+person.getName());
            formOutgoing.jTextField2.setText(person.getNip());
            formOutgoing.jTextField3.setText(person.getRank());
-           formOutgoing.jTextField4.setText(person.getPosition());
+           formOutgoing.jTextField4.setText(person.getRank());
            formOutgoing.jTextField7.setText(person.getPhone_number());
            formOutgoing.jButton5.setEnabled(rootPaneCheckingEnabled);
+           formOutgoing.jTextField9.setText(person.getPosition());
            this.dispose();
        }
        

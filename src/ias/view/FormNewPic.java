@@ -6,10 +6,15 @@
 package ias.view;
 
 import ias.daoImpl.PersonDaoImpl;
+import ias.daoImpl.RankDaoImpl;
+import ias.daoImpl.UnitDaoImpl;
 import ias.models.Asset;
 import ias.models.Person;
+import ias.models.Rank;
+import ias.models.Unit;
 import java.text.SimpleDateFormat;
 import java.util.List;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -21,6 +26,8 @@ public class FormNewPic extends javax.swing.JDialog {
     
     PersonDaoImpl personDaoImpl = new PersonDaoImpl();
     DefaultTableModel tableModel;
+    RankDaoImpl rankDaoImpl = new RankDaoImpl();
+    UnitDaoImpl unitDaoImpl = new UnitDaoImpl();
     /**
      * Creates new form FormNewPic
      */
@@ -30,10 +37,12 @@ public class FormNewPic extends javax.swing.JDialog {
         setLocationRelativeTo(null);
         tablePerson();
         jButton5.setEnabled(false);
+        initRankData();
+        initUnitData();
     }
     
      public void tablePerson(){
-        String [] header = {"NO","NIP","NAMA","PANGKAT","JABATAN","NO.HP"};
+        String [] header = {"NO","NRP","NAMA","PANGKAT","SATUAN","NO.HP"};
         tableModel = new DefaultTableModel(null, header);
         jTable1.setModel(tableModel);
         List<Person> listAllPerson = personDaoImpl.getAllPerson(jTextField6.getText());
@@ -53,6 +62,23 @@ public class FormNewPic extends javax.swing.JDialog {
         }
          jButton5.setEnabled(false);
     }
+     
+    private void initRankData(){
+        List<Rank> listAllRank = rankDaoImpl.getAllRank();
+        if(listAllRank != null || !listAllRank.isEmpty()){
+            for(Rank rank : listAllRank){
+                jComboBox1.addItem(rank.getName());
+            }
+        }
+    }
+     private void initUnitData(){
+        List<Unit> lisAllUnit = unitDaoImpl.getAllUnit();
+        if(lisAllUnit != null || !lisAllUnit.isEmpty()){
+            for(Unit unit : lisAllUnit){
+                jComboBox2.addItem(unit.getName());
+            }
+        }
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -71,8 +97,6 @@ public class FormNewPic extends javax.swing.JDialog {
         jTextField1 = new javax.swing.JTextField();
         jTextField2 = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
-        jTextField3 = new javax.swing.JTextField();
-        jTextField4 = new javax.swing.JTextField();
         jTextField5 = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
@@ -83,19 +107,21 @@ public class FormNewPic extends javax.swing.JDialog {
         jButton4 = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
         jButton6 = new javax.swing.JButton();
+        jComboBox1 = new javax.swing.JComboBox<>();
+        jComboBox2 = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Form PIC");
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
-        jLabel1.setText("NIP");
+        jLabel1.setText("NRP");
 
         jLabel2.setText("Nama");
 
         jLabel3.setText("Pangkat");
 
-        jLabel4.setText("Jabatan");
+        jLabel4.setText("Satuan");
 
         jLabel5.setText("No. Telp");
 
@@ -139,6 +165,10 @@ public class FormNewPic extends javax.swing.JDialog {
             }
         });
 
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "-- Pilih Pangkat --" }));
+
+        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "-- Pilih Satuan --" }));
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -158,24 +188,20 @@ public class FormNewPic extends javax.swing.JDialog {
                                 .addGap(49, 49, 49)
                                 .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                                        .addComponent(jLabel3)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel4)
+                                    .addComponent(jLabel5)
+                                    .addComponent(jLabel3))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jLabel4)
-                                            .addComponent(jLabel5))
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                                .addComponent(jButton2)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(jButton6)))))
-                                .addGap(99, 99, 99)))
+                                        .addComponent(jButton2)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jButton6))
+                                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 218, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 218, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(39, 39, 39)))
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -203,11 +229,11 @@ public class FormNewPic extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
-                    .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
@@ -245,13 +271,21 @@ public class FormNewPic extends javax.swing.JDialog {
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
        String nip = jTextField1.getText();
        String name = jTextField2.getText();
-       String rank = jTextField3.getText();
-       String position      = jTextField4.getText();
+       String rank = jComboBox1.getSelectedItem().toString();
+       String position      = jComboBox2.getSelectedItem().toString();
        String phoneNumber   = jTextField5.getText();
        
        
        Person person = new Person(0, nip, name, rank, position, phoneNumber);
-       personDaoImpl.addNewPic(person, this);
+       if(jComboBox1.getSelectedIndex() == 0){
+           JOptionPane.showMessageDialog(rootPane, "Pilih Pangkat !");
+       }
+       else if(jComboBox2.getSelectedIndex() == 0){
+           JOptionPane.showMessageDialog(rootPane, "Pilih Stuan !");
+       }
+       else {
+        personDaoImpl.addNewPic(person, this);
+       }
        
     }//GEN-LAST:event_jButton6ActionPerformed
 
@@ -262,14 +296,14 @@ public class FormNewPic extends javax.swing.JDialog {
         String nip          = jTable1.getValueAt(row, 1).toString();
         String name         = jTable1.getValueAt(row, 2).toString();
         String rank         = jTable1.getValueAt(row, 3).toString();
-        String position     = jTable1.getValueAt(row, 4).toString();
+        String unit         = jTable1.getValueAt(row, 4).toString();
         String phoneNumber  = jTable1.getValueAt(row, 5).toString();
         
         jTextField1.setText(nip);
         jTextField1.setEnabled(false);
         jTextField2.setText(name);
-        jTextField3.setText(rank);
-        jTextField4.setText(position);
+        jComboBox1.setSelectedItem(rank);
+        jComboBox2.setSelectedItem(unit);
         jTextField5.setText(phoneNumber);
     }//GEN-LAST:event_jTable1MouseClicked
 
@@ -277,8 +311,8 @@ public class FormNewPic extends javax.swing.JDialog {
        Person person = new Person(0, 
                jTextField1.getText(), 
                jTextField2.getText(), 
-               jTextField3.getText(), 
-               jTextField4.getText(),
+               jComboBox1.getSelectedItem().toString(), 
+               jComboBox2.getSelectedItem().toString(), 
                jTextField5.getText());
        personDaoImpl.saveOnEdit(person);
        tablePerson();
@@ -333,6 +367,8 @@ public class FormNewPic extends javax.swing.JDialog {
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
+    private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -343,8 +379,6 @@ public class FormNewPic extends javax.swing.JDialog {
     private javax.swing.JTable jTable1;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
     private javax.swing.JTextField jTextField5;
     private javax.swing.JTextField jTextField6;
     // End of variables declaration//GEN-END:variables
