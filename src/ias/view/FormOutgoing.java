@@ -5,6 +5,7 @@
  */
 package ias.view;
 
+import ias.ConnectionMariaDb;
 import ias.daoImpl.AssetDaoImpl;
 import ias.daoImpl.LockDaoImpl;
 import ias.daoImpl.OutgoingDaoImpl;
@@ -16,11 +17,22 @@ import ias.models.Outgoing;
 import ias.models.Person;
 import ias.models.Transaction;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.view.JasperViewer;
 
 /**
  *
@@ -234,6 +246,81 @@ public class FormOutgoing extends javax.swing.JDialog {
                  outgoingDaoImpl.deleteOutgoing(jTextField6.getText());
             }
     }
+    
+    public String generateInvoiceNumber(String tr_number){
+        int year = LocalDate.now().getYear();
+        int month   = LocalDate.now().getMonthValue();
+        String prefixName = "P/";
+        String monthRomawi = "";
+        switch(month){
+            case 1 :
+                monthRomawi = "I";
+                break;
+            case 2 :
+                 monthRomawi = "II";
+                break;
+            case 3 :
+                 monthRomawi = "III";
+                break;
+            case 4 :
+                 monthRomawi = "IV";
+                break;
+            case 5 :
+                 monthRomawi = "V";
+                break;
+            case 6 :
+                 monthRomawi = "VI";
+                break;
+            case 7 :
+                 monthRomawi = "VII";
+                break;
+            case 8 :
+                 monthRomawi = "VIII";
+                break;
+            case 9 :
+                 monthRomawi = "IX";
+                break;
+            case 10 :
+                 monthRomawi = "X";
+                 break;
+            case 11 :
+                 monthRomawi = "XI";
+                break;
+            case 12 :
+             monthRomawi = "XII";
+            break;
+        } 
+        String report_number = String.format("%s%s/%s/%s",prefixName,tr_number,monthRomawi,String.valueOf(year));
+        
+        return report_number;
+    }
+    
+    private void print(String params,String report_number){
+        try {
+            Map param = new HashMap();
+            param.put("tr_number", params);
+            param.put("report_number",report_number);
+            
+            String pathReport = System.getProperty("user.dir")+"/src/ias/report/report_outgoing.jrxml";
+            JasperReport jasperReport = JasperCompileManager.compileReport(pathReport.replace("dist", ""));
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, param,ConnectionMariaDb.getConnection());
+            //JasperViewer.viewReport(jasperPrint, false);
+            JasperViewer jasperViewer = new JasperViewer(jasperPrint, false);
+          
+            jasperViewer.setVisible(true);
+            JDialog dialog = new JDialog(this);//the owner
+            dialog.setContentPane(jasperViewer.getContentPane());
+            dialog.setSize(jasperViewer.getSize());
+            dialog.setTitle("Bukti Peminjaman");
+            dialog.setVisible(true);
+            
+          
+        } catch (JRException ex) {
+            Logger.getLogger(FormOutgoing.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -483,6 +570,11 @@ public class FormOutgoing extends javax.swing.JDialog {
         });
 
         jButton6.setText("Cetak");
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton6ActionPerformed(evt);
+            }
+        });
 
         jButton7.setText("Hapus Item");
         jButton7.addActionListener(new java.awt.event.ActionListener() {
@@ -630,6 +722,12 @@ public class FormOutgoing extends javax.swing.JDialog {
         setEnableField();
         jButton5.setEnabled(false);
     }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        String report_number = generateInvoiceNumber(jTextField6.getText());
+        print(jTextField6.getText(), report_number);
+        
+    }//GEN-LAST:event_jButton6ActionPerformed
 
     /**
      * @param args the command line arguments

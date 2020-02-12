@@ -51,6 +51,7 @@ public class PanelIncoming extends javax.swing.JPanel {
         initComponents();
         initMapPerson();
         initMapAsset();
+        jTextField9.setVisible(false);
     }
     
     private void initMapAsset(){
@@ -110,6 +111,7 @@ public class PanelIncoming extends javax.swing.JPanel {
             }
             else {
                 jTextField9.setText("KOMPLIT");
+                  jTextField9.setVisible(true);
                 JOptionPane.showMessageDialog(jButton1, "Transaksi sudah komplit");
                 jTextField1.setEnabled(false);
                 jButton1.setEnabled(false);

@@ -3,28 +3,302 @@
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
+	<parameter name="tr_number" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="report_number" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT 
+asset.name AS NAMA_ASSET, 
+asset.code AS ID_ASSET,
+asset.conditions as KONDISI,
+person.name AS NAMA, 
+person.nip AS NRP,
+person.rank AS PANGKAT,
+person.position AS SATUAN,
+person.phone_number AS NOMOR_TELPON,
+tr_outgoing.total_asset AS TOTAL_ASSET,
+tr_outgoing.tr_number AS TR_NUMBER,
+transaction.start_date as TGL_PINJAM
+ FROM transaction
+ INNER JOIN tr_outgoing ON transaction.tr_number = tr_outgoing.tr_number
+ INNER JOIN person ON transaction.id_pic = person.nip
+ INNER JOIN asset ON transaction.id_asset = asset.code
+ WHERE transaction.tr_number = $P{tr_number}]]>
+	</queryString>
+	<field name="NAMA_ASSET" class="java.lang.String"/>
+	<field name="ID_ASSET" class="java.lang.String"/>
+	<field name="KONDISI" class="java.lang.String"/>
+	<field name="NAMA" class="java.lang.String"/>
+	<field name="NRP" class="java.lang.String"/>
+	<field name="PANGKAT" class="java.lang.String"/>
+	<field name="SATUAN" class="java.lang.String"/>
+	<field name="NOMOR_TELPON" class="java.lang.String"/>
+	<field name="TOTAL_ASSET" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="TR_NUMBER" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="TGL_PINJAM" class="java.sql.Date"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="79" splitType="Stretch"/>
+		<band height="109" splitType="Stretch">
+			<staticText>
+				<reportElement x="26" y="54" width="100" height="20" uuid="479ba5e2-01a7-4182-8a52-8c245b84bd2e"/>
+				<textElement textAlignment="Center">
+					<font fontName="Calibri" size="12"/>
+				</textElement>
+				<text><![CDATA[TIM TEKNIK]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2" y="74" width="145" height="20" uuid="ebb2da3a-570e-47cb-a863-ca07764b2365"/>
+				<textElement textAlignment="Center">
+					<font fontName="Calibri" size="12" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[DATASEMEN BANTUAN]]></text>
+			</staticText>
+		</band>
 	</title>
 	<pageHeader>
-		<band height="35" splitType="Stretch">
+		<band height="204" splitType="Stretch">
 			<staticText>
-				<reportElement x="202" y="8" width="146" height="20" uuid="30fbe92b-591e-42eb-804c-d150cb9cdd21"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Calibri"/>
+				<reportElement x="201" y="0" width="147" height="20" uuid="30fbe92b-591e-42eb-804c-d150cb9cdd21"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font fontName="Calibri" size="12" isBold="false"/>
 				</textElement>
 				<text><![CDATA[FORM PEMINJAMAN]]></text>
 			</staticText>
+			<staticText>
+				<reportElement x="193" y="19" width="87" height="20" uuid="d3aeff04-cf65-4fb6-9007-8c4cf108b879"/>
+				<textElement>
+					<font fontName="Calibri" size="12"/>
+				</textElement>
+				<text><![CDATA[Nomer:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="18" y="69" width="100" height="20" uuid="b3be932c-ff86-440a-af46-ac4715646e50"/>
+				<text><![CDATA[NAMA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="18" y="89" width="100" height="20" uuid="ec3c561e-55e2-4b42-9b36-ecf134cd7699"/>
+				<text><![CDATA[PANGKAT]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="18" y="109" width="100" height="20" uuid="5464bbbc-f0a1-4744-bd15-7409a102eadb"/>
+				<text><![CDATA[NRP]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="18" y="129" width="100" height="20" uuid="20e0fd79-d48d-4c22-8fc4-d2f68b07d247"/>
+				<text><![CDATA[SATUAN]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="18" y="149" width="100" height="20" uuid="8ef76614-466a-4041-9aff-e9f646cfc3c2"/>
+				<text><![CDATA[NOMER HP]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="118" y="69" width="8" height="20" uuid="18b08426-3142-479f-9c0e-9c484c78fa95"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="118" y="89" width="8" height="20" uuid="e77d1b0f-0af2-4b7b-8f7d-67697a09591d"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="118" y="109" width="8" height="20" uuid="25f1022e-f462-422f-9045-392409153bd7"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="118" y="129" width="8" height="20" uuid="4d726942-32e2-40a1-bfc8-c4f84805198c"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="118" y="148" width="8" height="20" uuid="24f87002-11fd-4763-8d5a-8e334e1e67ba"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="126" y="69" width="100" height="20" uuid="e5659ce0-de84-46ea-89a9-59d28ba1447f"/>
+				<textFieldExpression><![CDATA[$F{NAMA}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="126" y="89" width="100" height="20" uuid="57d56bd3-bd2d-4930-b289-10417a9d68a2"/>
+				<textFieldExpression><![CDATA[$F{PANGKAT}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="126" y="109" width="100" height="20" uuid="0546186f-7808-47ba-8d73-0bea1362efac"/>
+				<textFieldExpression><![CDATA[$F{NRP}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="126" y="129" width="100" height="20" uuid="e767a19b-e548-496f-8242-93b4a4e54218"/>
+				<textFieldExpression><![CDATA[$F{SATUAN}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="126" y="149" width="100" height="20" uuid="6a8e467e-5688-4b48-b85e-fe3df18919d3"/>
+				<textFieldExpression><![CDATA[$F{NOMOR_TELPON}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="237" y="20" width="143" height="20" uuid="07ece8f7-399e-4cc5-a851-6f806a0fca6f"/>
+				<textElement>
+					<font fontName="Calibri" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{report_number}]]></textFieldExpression>
+			</textField>
 		</band>
 	</pageHeader>
 	<columnHeader>
-		<band height="61" splitType="Stretch"/>
+		<band height="25" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="5" width="36" height="20" uuid="de73d06f-bb3f-4809-8ea6-510b26b54c90"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="12"/>
+				</textElement>
+				<text><![CDATA[NO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="36" y="5" width="150" height="20" uuid="033eea8a-d753-4264-848b-2099ec1f5608"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="12"/>
+				</textElement>
+				<text><![CDATA[NAMA BARANG]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="186" y="5" width="100" height="20" uuid="ca53a19b-c5f1-4040-b64b-3cbebc5e2226"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="12"/>
+				</textElement>
+				<text><![CDATA[ID BARANG]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="286" y="5" width="69" height="20" uuid="3b60072c-f495-4dc0-8f8e-c84eecddec1b"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="12"/>
+				</textElement>
+				<text><![CDATA[JUMLAH]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="355" y="5" width="100" height="20" uuid="ef2f104a-7aab-4805-82a1-dde88cc362f0"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="12"/>
+				</textElement>
+				<text><![CDATA[KONDISI]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="455" y="5" width="100" height="20" uuid="e5eeeb96-4c22-404d-b2ce-4b1c46fbc511"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="12"/>
+				</textElement>
+				<text><![CDATA[TGL PINJAM]]></text>
+			</staticText>
+		</band>
 	</columnHeader>
 	<detail>
-		<band height="125" splitType="Stretch"/>
+		<band height="21" splitType="Stretch">
+			<textField>
+				<reportElement x="36" y="0" width="150" height="20" uuid="76e638ee-da2a-45f0-bad2-cb736f74ded7"/>
+				<box leftPadding="2">
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{NAMA_ASSET}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="186" y="0" width="100" height="20" uuid="ffd5ab91-1595-4eba-ac42-41b0ca94f510"/>
+				<box leftPadding="2">
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{ID_ASSET}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="286" y="0" width="69" height="20" uuid="53fb61b3-d95d-4b4d-b82a-dbfec5f20479"/>
+				<box>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[1]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="355" y="0" width="100" height="20" uuid="cae8bc0e-044c-4418-a238-2ae3d01387db"/>
+				<box leftPadding="2">
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{KONDISI}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd MMMMM yyyy">
+				<reportElement x="455" y="0" width="100" height="20" uuid="535dc64c-43aa-4ebe-8cba-78a010be777d"/>
+				<box leftPadding="2">
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{TGL_PINJAM}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="0" width="36" height="20" uuid="450b95c6-1dab-44a8-9d39-963f0135c9bd"/>
+				<box>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>
+			</textField>
+		</band>
 	</detail>
 	<columnFooter>
 		<band height="45" splitType="Stretch"/>
